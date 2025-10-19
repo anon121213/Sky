@@ -1,3 +1,6 @@
 [submodule "Sky/vendor/spdlog"]
 	path = Sky/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Sky/vendor/GLFW"]
+	path = Sky/vendor/GLFW
+	url = https://github.com/TheCherno/GLFW

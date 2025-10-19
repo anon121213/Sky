@@ -25,9 +25,18 @@ namespace Sky {
 		unsigned int m_Width, m_Height;
 	};
 
+	class WindowCloseEvent : public Event
+	{
+	public:
+		WindowCloseEvent() {};
+
+		EVENT_CLASS_TYPE(WindowClose)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+	};
+
 	class SKY_API AppTickEvent : public Event {
 	public:
-		AppTickEvent(){}
+		AppTickEvent() {}
 
 		EVENT_CLASS_TYPE(AppTick);
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)

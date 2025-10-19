@@ -9,6 +9,11 @@ workspace "Sky"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+IncludeDir = {}
+IncludeDir["GLFW"] = "Sky/vendor/GLFW/include"
+
+include "Sky/vendor/GLFW"
+
 project "Sky"
 	location "Sky"
 	kind "SharedLib"
@@ -27,7 +32,13 @@ project "Sky"
 
 	includedirs {
 		"%{prj.name}/src",
-		"Sky/vendor/spdlog/include"
+		"Sky/vendor/spdlog/include",
+		"%{IncludeDir.GLFW}"
+	}
+
+	links {
+		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"
@@ -47,14 +58,17 @@ project "Sky"
 
 	filter "configurations:Debug"
 		defines "SKY_DEBUG"
+		buildoptions "/MDd"
 		optimize "On"
 
 	filter "configurations:Release"
 		defines "SKY_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "SKY_DIST"
+		buildoptions "/MD"
 		optimize "On"
 
 
@@ -93,12 +107,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "SKY_DEBUG"
+		buildoptions "/MDd"
 		optimize "On"
 
 	filter "configurations:Release"
 		defines "SKY_RELEASE"
+		buildoptions "/MD"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "SKY_DIST"
+		buildoptions "/MD"
 		optimize "On"

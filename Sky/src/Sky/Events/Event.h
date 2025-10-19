@@ -2,6 +2,12 @@
 
 #include "Sky/Core.h"
 
+#pragma once
+#include <string>
+#include <functional>
+#include <iostream>
+#include <sstream>
+
 namespace Sky {
 
 	enum class EventType {
@@ -9,7 +15,7 @@ namespace Sky {
 		WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MoseScrolled
+		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
 	};
 
 
@@ -22,7 +28,7 @@ namespace Sky {
 		EventCategoryMouseButton = BIT(4),
 	};
 
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
+#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
 
@@ -37,11 +43,11 @@ namespace Sky {
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
+		bool Handled = false;
+
 		inline bool IsInCategory(EventCategory category) {
 			return GetCategoryFlags() & category;
 		}
-	protected:
-		bool m_handled = false;
 	};
 
 	class EventDispatcher {
@@ -58,7 +64,7 @@ namespace Sky {
 		bool Dispatch(EventFn<T> func) {
 			if (m_Event.GetEventType() == T::GetStaticType())
 			{
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.Handled = func(*(T*)&m_Event);
 				return true;
 			}
 

@@ -1,14 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sky">
       <UniqueIdentifier>{3C22880B-A82B-887C-31A7-9E7C9DAF937C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sky\Event">
-      <UniqueIdentifier>{8D60054B-F9CA-B9C1-4209-6B67AEB29716}</UniqueIdentifier>
+    <Filter Include="Sky\Events">
+      <UniqueIdentifier>{A072B1AB-8C2A-F3F8-F531-CC54E1088EE9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
+      <Filter>Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sky.h" />
     <ClInclude Include="src\Sky\Application.h">
       <Filter>Sky</Filter>
@@ -19,25 +28,43 @@
     <ClInclude Include="src\Sky\EntryPoint.h">
       <Filter>Sky</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Event\ApplicationEvent.h">
-      <Filter>Sky\Event</Filter>
+    <ClInclude Include="src\Sky\Events\ApplicationEvent.h">
+      <Filter>Sky\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Event\Event.h">
-      <Filter>Sky\Event</Filter>
+    <ClInclude Include="src\Sky\Events\Event.h">
+      <Filter>Sky\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Event\KeyEvent.h">
-      <Filter>Sky\Event</Filter>
+    <ClInclude Include="src\Sky\Events\KeyEvent.h">
+      <Filter>Sky\Events</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Event\MouseEvent.h">
-      <Filter>Sky\Event</Filter>
+    <ClInclude Include="src\Sky\Events\MouseEvent.h">
+      <Filter>Sky\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Layer.h">
+      <Filter>Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\LayerStack.h">
+      <Filter>Sky</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\Log.h">
+      <Filter>Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Window.h">
       <Filter>Sky</Filter>
     </ClInclude>
     <ClInclude Include="src\skypch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
+      <Filter>Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Sky\Application.cpp">
+      <Filter>Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Layer.cpp">
+      <Filter>Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\LayerStack.cpp">
       <Filter>Sky</Filter>
     </ClCompile>
     <ClCompile Include="src\Sky\Log.cpp">
