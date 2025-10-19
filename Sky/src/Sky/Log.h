@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 
 namespace Sky {
 
@@ -30,8 +31,8 @@ namespace Sky {
 
 // CLient log macros
 
-#define SKY_CLIENT_ERROR(...)   ::Sky::Log::GetClientLogger()->error(__VA_ARGS__)
-#define SKY_CLIENT_WARN(...)    ::Sky::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define SKY_CLIENT_INFO(...)    ::Sky::Log::GetClientLogger()->info(__VA_ARGS__)
-#define SKY_CLIENT_TRACE(...)   ::Sky::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define SKY_CLIENT_Fatal(...)   ::Sky::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define SKY_ERROR(...)   ::Sky::Log::GetClientLogger()->error(__VA_ARGS__)
+#define SKY_WARN(...)    ::Sky::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define SKY_INFO(...)    ::Sky::Log::GetClientLogger()->info(__VA_ARGS__)
+#define SKY_TRACE(...)   ::Sky::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define SKY_Fatal(...)   ::Sky::Log::GetClientLogger()->fatal(__VA_ARGS__)

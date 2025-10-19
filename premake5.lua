@@ -23,6 +23,7 @@ project "Sky"
 	}
 
 	includedirs {
+		"%{prj.name}/src",
 		"Sky/vendor/spdlog/include"
 	}
 
