@@ -4,6 +4,9 @@
     <Filter Include="Sky">
       <UniqueIdentifier>{3C22880B-A82B-887C-31A7-9E7C9DAF937C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sky\Event">
+      <UniqueIdentifier>{8D60054B-F9CA-B9C1-4209-6B67AEB29716}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Sky.h" />
@@ -16,9 +19,22 @@
     <ClInclude Include="src\Sky\EntryPoint.h">
       <Filter>Sky</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sky\Event\ApplicationEvent.h">
+      <Filter>Sky\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Event\Event.h">
+      <Filter>Sky\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Event\KeyEvent.h">
+      <Filter>Sky\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Event\MouseEvent.h">
+      <Filter>Sky\Event</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sky\Log.h">
       <Filter>Sky</Filter>
     </ClInclude>
+    <ClInclude Include="src\skypch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Sky\Application.cpp">
@@ -27,5 +43,6 @@
     <ClCompile Include="src\Sky\Log.cpp">
       <Filter>Sky</Filter>
     </ClCompile>
+    <ClCompile Include="src\skypch.cpp" />
   </ItemGroup>
 </Project>

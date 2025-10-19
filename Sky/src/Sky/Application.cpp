@@ -1,3 +1,4 @@
+#include "skypch.h"
 #include "Application.h"
 
 #include "Sky/Event/ApplicationEvent.h"
@@ -16,11 +17,6 @@ namespace Sky {
 
 	void Application::Run()
 	{
-		WindowResizeEvent e(1280, 720);
-		if (e.IsInCategory(EventCategoryApplication))
-		{
-			SKY_TRACE(e.ToString());
-		}
 		while (true) {}
 	}
 

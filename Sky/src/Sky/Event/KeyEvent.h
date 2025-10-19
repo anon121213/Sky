@@ -2,8 +2,6 @@
 
 #include "Event.h"
 
-#include <sstream>
-
 namespace Sky {
 
 	class SKY_API KeyEvent : public Event

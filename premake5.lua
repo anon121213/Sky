@@ -17,6 +17,9 @@ project "Sky"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "skypch.h"
+	pchsource "Sky/src/skypch.cpp"
+
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp"

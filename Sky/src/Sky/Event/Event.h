@@ -2,9 +2,6 @@
 
 #include "Sky/Core.h"
 
-#include <string>
-#include <functional>
-
 namespace Sky {
 
 	enum class EventType {
