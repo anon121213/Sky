@@ -11,8 +11,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Sky/vendor/GLFW/include"
+IncludeDir["Glad"] = "Sky/vendor/Glad/include"
+IncludeDir["ImGui"] = "Sky/vendor/imgui"
 
 include "Sky/vendor/GLFW"
+include "Sky/vendor/Glad"
+include "Sky/vendor/imgui"
 
 project "Sky"
 	location "Sky"
@@ -33,11 +37,15 @@ project "Sky"
 	includedirs {
 		"%{prj.name}/src",
 		"Sky/vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
 	}
 
 	links {
 		"GLFW",
+		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
 
@@ -49,7 +57,8 @@ project "Sky"
 
 	defines {
 		"SKY_PLATFORM_WINDOWS",
-		"SKY_BUILD_DLL"
+		"SKY_BUILD_DLL",
+		"GLFW_INCLUDE_NONE"
 	}
 
 	postbuildcommands {

@@ -4,6 +4,9 @@
     <Filter Include="Platform">
       <UniqueIdentifier>{2AC788B4-1694-E3BF-3FAD-D1672BD9184E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Platform\OpenGL">
+      <UniqueIdentifier>{1E7D2C1D-8A08-9AE1-9319-1DD6FF23F6E1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Platform\Windows">
       <UniqueIdentifier>{64FBD71A-50F4-F66C-7926-DCF1657ED678}</UniqueIdentifier>
     </Filter>
@@ -13,8 +16,14 @@
     <Filter Include="Sky\Events">
       <UniqueIdentifier>{A072B1AB-8C2A-F3F8-F531-CC54E1088EE9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sky\ImGui">
+      <UniqueIdentifier>{6654484B-D2BE-FCC1-1BFD-AD6787A6DA16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\ImguiOpenGLRenderer.h">
+      <Filter>Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h">
       <Filter>Platform\Windows</Filter>
     </ClInclude>
@@ -40,6 +49,9 @@
     <ClInclude Include="src\Sky\Events\MouseEvent.h">
       <Filter>Sky\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Sky\ImGui\ImGuiLayer.h">
+      <Filter>Sky\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Sky\Layer.h">
       <Filter>Sky</Filter>
     </ClInclude>
@@ -55,11 +67,17 @@
     <ClInclude Include="src\skypch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\ImguiOpenGLRenderer.cpp">
+      <Filter>Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Sky\Application.cpp">
       <Filter>Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\ImGui\ImGuiLayer.cpp">
+      <Filter>Sky\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Sky\Layer.cpp">
       <Filter>Sky</Filter>
