@@ -13,6 +13,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "Sky/vendor/GLFW/include"
 IncludeDir["Glad"] = "Sky/vendor/Glad/include"
 IncludeDir["ImGui"] = "Sky/vendor/imgui"
+IncludeDir["glm"] = "Sky/vendor/glm"
 
 include "Sky/vendor/GLFW"
 include "Sky/vendor/Glad"
@@ -22,6 +23,7 @@ project "Sky"
 	location "Sky"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -31,7 +33,9 @@ project "Sky"
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
 
 	includedirs {
@@ -40,6 +44,7 @@ project "Sky"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.glm}",
 	}
 
 	links {
@@ -97,7 +102,8 @@ project "Sandbox"
 
 	includedirs {
 		"Sky/vendor/spdlog/include",
-		"Sky/src"
+		"Sky/src",
+		"%{IncludeDir.glm}",
 	}
 
 	links {
