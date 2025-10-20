@@ -20,7 +20,8 @@ namespace Sky {
 		inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
-	private:
+
+		inline virtual void* GetNatinveWindow() const { return m_Window; }
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
 	private:

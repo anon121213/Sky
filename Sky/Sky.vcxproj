@@ -164,11 +164,13 @@
     <ClInclude Include="src\Sky\Events\KeyEvent.h" />
     <ClInclude Include="src\Sky\Events\MouseEvent.h" />
     <ClInclude Include="src\Sky\ImGui\ImGuiLayer.h" />
+    <ClInclude Include="src\Sky\Input.h" />
     <ClInclude Include="src\Sky\Layer.h" />
     <ClInclude Include="src\Sky\LayerStack.h" />
     <ClInclude Include="src\Sky\Log.h" />
     <ClInclude Include="src\Sky\Window.h" />
     <ClInclude Include="src\skypch.h" />
+    <ClInclude Include="src\Platform\Windows\WindowsInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\ImguiOpenGLRenderer.cpp" />
@@ -181,6 +183,7 @@
     <ClCompile Include="src\skypch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">
