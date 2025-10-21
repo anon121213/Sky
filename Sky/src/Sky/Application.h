@@ -7,6 +7,7 @@
 #include "Sky/Events/Event.h"
 #include "Sky/Events/ApplicationEvent.h"
 
+#include "Sky/ImGui/ImGuiLayer.h"
 
 namespace Sky {
 
@@ -29,6 +30,7 @@ namespace Sky {
 		bool OnWindowClosed(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 	private:

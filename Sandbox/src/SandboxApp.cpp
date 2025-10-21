@@ -5,7 +5,6 @@ class Sandbox : public Sky::Application
 public:
 	Sandbox()
 	{
-		PushOverlay(new Sky::ImGuiLayer());
 	}
 
 	~Sandbox()

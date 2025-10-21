@@ -103,6 +103,7 @@ project "Sandbox"
 	includedirs {
 		"Sky/vendor/spdlog/include",
 		"Sky/src",
+		"Sky/vendor",
 		"%{IncludeDir.glm}",
 	}
 

@@ -21,7 +21,7 @@ namespace Sky {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 
-		inline virtual void* GetNatinveWindow() const { return m_Window; }
+		inline virtual void* GetNativeWindow() const { return m_Window; }
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
 	private:

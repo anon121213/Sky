@@ -11,21 +11,21 @@ namespace Sky {
 
 	bool WindowsInput::IsKeyPressedImpl(int keyCode)
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNatinveWindow());
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetKey(window, keyCode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNatinveWindow());
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		auto state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
 
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
-		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNatinveWindow());
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		return { (float)xpos, (float)ypos };
