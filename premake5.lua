@@ -1,5 +1,6 @@
 workspace "Sky"
 	architecture "x64"
+	startproject "Sandbox"
 	
 	configurations {
 		"Debug",
@@ -21,9 +22,10 @@ include "Sky/vendor/imgui"
 
 project "Sky"
 	location "Sky"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -36,6 +38,10 @@ project "Sky"
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
+	}
+
+	defines {
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs {
@@ -55,42 +61,40 @@ project "Sky"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 		buildoptions "/utf-8" 
 
-	defines {
-		"SKY_PLATFORM_WINDOWS",
-		"SKY_BUILD_DLL",
-		"GLFW_INCLUDE_NONE"
-	}
-
-	postbuildcommands {
-		("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
-	}
+		defines {
+			"SKY_PLATFORM_WINDOWS",
+			"SKY_BUILD_DLL",
+			"GLFW_INCLUDE_NONE",
+		}
 
 	filter "configurations:Debug"
 		defines "SKY_DEBUG"
-		buildoptions "/MDd"
-		optimize "On"
+		runtime "Debug"
+		optimize "on"
 
 	filter "configurations:Release"
 		defines "SKY_RELEASE"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "SKY_DIST"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"
 
+	-- this need to remove the same macros name of version in imgui.h
+	filter "files:**/imgui/*.cpp"
+    	disablewarnings { "4005" }
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
-
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -112,8 +116,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 		buildoptions "/utf-8" 
 
@@ -123,15 +125,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "SKY_DEBUG"
-		buildoptions "/MDd"
-		optimize "On"
+		runtime "Debug"
+		optimize "on"
 
 	filter "configurations:Release"
 		defines "SKY_RELEASE"
 		buildoptions "/MD"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Dist"
 		defines "SKY_DIST"
-		buildoptions "/MD"
-		optimize "On"
+		runtime "Release"
+		optimize "on"

@@ -1,11 +1,15 @@
 #pragma once
 
 #ifdef SKY_PLATFORM_WINDOWS 
+#if SKY_DYNAMIC_LINK
 	#ifdef SKY_BUILD_DLL
 		#define SKY_API __declspec(dllexport)
 	#else
 		#define SKY_API __declspec(dllimport)
 	#endif
+#else
+	#define SKY_API	
+#endif 
 #else
 	#error Sky only support Windows!
 #endif 
