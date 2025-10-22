@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sky/Window.h"
+#include "Sky/Renderer/GraphicsContext.h"
 
 #include "GLFW/glfw3.h"
 
@@ -22,10 +23,12 @@ namespace Sky {
 		bool IsVSync() const override;
 
 		inline virtual void* GetNativeWindow() const { return m_Window; }
+	private:
 		virtual void Init(const WindowProps& props);
 		virtual void ShutDown();
 	private:
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData {
 			std::string Title;
