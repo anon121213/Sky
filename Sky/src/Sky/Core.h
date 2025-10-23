@@ -18,8 +18,8 @@
 	#define SKY_ASSERT(x, ...) { if(!(x)) { SKY_ERROR("Assertion Failed: {0}", __VA__ARGS__); __debugbreake(); } }
 	#define SKY_CORE_ASSERT(x, ...) { if(!(x)) { SKY_CORE_ERROR("Assertion Failed: {0}", __VA__ARGS__); __debugbreake(); } }
 #else
-	#define SKY_ACCERT(x, ...)
-	#define SKY_CORE_ACCERT(x, ...)
+	#define SKY_ASSERT(x, ...)
+	#define SKY_CORE_ASSERT(x, ...)
 #endif 
 
 

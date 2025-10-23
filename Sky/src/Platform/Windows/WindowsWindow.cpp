@@ -36,7 +36,7 @@ namespace Sky {
 		if (!s_GLFWInitialized)
 		{
 			int success = glfwInit();
-			SKY_CORE_ACCERT(success, "Could not initialize GLFW!");
+			SKY_CORE_ASSERT(success, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 			s_GLFWInitialized = true;
 		}
