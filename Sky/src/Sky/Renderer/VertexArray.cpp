@@ -10,8 +10,8 @@ namespace Sky {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:     SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!"); return nullptr;
-		case RendererAPI::OpneGL:   return new OpenGLVertexArray();
+		case RendererAPI::API::None:     SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!"); return nullptr;
+		case RendererAPI::API::OpenGL:   return new OpenGLVertexArray();
 		}
 
 		SKY_CORE_ASSERT(false, "Unknown RenderAPI!")
