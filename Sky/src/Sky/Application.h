@@ -12,6 +12,7 @@
 #include "Sky/Renderer/Shader.h"
 #include "Sky/Renderer/Buffer.h"
 #include "Sky/Renderer/VertexArray.h"
+#include "Sky/Renderer/OrthographicCamera.h"
 
 namespace Sky {
 
@@ -43,6 +44,8 @@ namespace Sky {
 
 		std::shared_ptr<Shader> m_BlueShader;
 		std::shared_ptr<VertexArray> m_SquareVA;
+
+		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};
