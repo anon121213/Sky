@@ -2,11 +2,13 @@
 
 #include "imgui/imgui.h"
 
+#include "glm/gtc/matrix_transform.hpp"
+
 class ExampleLayer : public Sky::Layer 
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_SquarePosition(0)
 	{
 		m_VertexArray.reset(Sky::VertexArray::Create());
 
@@ -58,6 +60,7 @@ public:
 			layout(location = 1) in vec4 a_Color;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
 
 			out vec3 v_Position;
 			out vec4 v_Color;
@@ -66,7 +69,7 @@ public:
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -93,12 +96,14 @@ public:
 			layout(location = 0) in vec3 a_Position;
 
 			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);	
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -119,16 +124,16 @@ public:
 		m_BlueShader.reset(new Sky::Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
 	}
 
-	void OnUpdate() override 
+	void OnUpdate(Sky::Timestep ts) override
 	{
 		Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Sky::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-
 		Sky::Renderer::BeginScene(m_Camera);
 
-		Sky::Renderer::Submit(m_BlueShader, m_SquareVA);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePosition);
+
+		Sky::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
 		Sky::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Sky::Renderer::EndScene();
@@ -150,8 +155,8 @@ private:
 	std::shared_ptr<Sky::VertexArray> m_SquareVA;
 
 	Sky::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	float m_CameraSpeed = 0.1;
+
+	glm::vec3 m_SquarePosition;
 };
 
 class Sandbox : public Sky::Application

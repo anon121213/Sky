@@ -153,6 +153,7 @@
     <ClInclude Include="src\Sky.h" />
     <ClInclude Include="src\Sky\Application.h" />
     <ClInclude Include="src\Sky\Core.h" />
+    <ClInclude Include="src\Sky\Core\Timestep.h" />
     <ClInclude Include="src\Sky\EntryPoint.h" />
     <ClInclude Include="src\Sky\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Sky\Events\Event.h" />

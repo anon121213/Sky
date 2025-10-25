@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sky/Core.h"
+#include "Sky/Core/Timestep.h"
 #include "Sky/Events/Event.h"
 
 namespace Sky {
@@ -13,7 +14,7 @@ namespace Sky {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

@@ -6,6 +6,8 @@
 #include "Sky/Layer.h"
 #include "Sky/Log.h"
 
+#include "Sky/Core/Timestep.h"
+
 #include "Sky/Input.h"
 #include "Sky/KeyCodes.h"
 #include "Sky/MouseButtonCodes.h"
