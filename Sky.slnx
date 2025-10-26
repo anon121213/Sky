@@ -1,7 +1,0 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-  </Configurations>
-  <Project Path="Sandobx/Sandobx.vcxproj" Id="0482bc42-c887-456e-abb3-a4706402fba7" />
-  <Project Path="Sky/Sky.vcxproj" Id="65fee038-298c-4bcb-b9ca-4322d5b69834" />
-</Solution>

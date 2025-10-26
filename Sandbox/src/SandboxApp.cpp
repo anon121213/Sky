@@ -4,11 +4,15 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "glm/gtc/type_ptr.hpp"
+
+#include "Platform/OpenGL/OpenGLShader.h"
+
 class ExampleLayer : public Sky::Layer 
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_SquarePosition(0)
+		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_SquareColor(0.8f, 0.2f, 0.3f, 1.0f)
 	{
 		m_VertexArray.reset(Sky::VertexArray::Create());
 
@@ -88,9 +92,9 @@ public:
 			}
 		)";
 
-		m_Shader.reset(new Sky::Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Sky::Shader::Create(vertexSrc, fragmentSrc));
 
-		std::string blueShaderVertexSrc = R"(
+		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
@@ -107,33 +111,64 @@ public:
 			}
 		)";
 
-		std::string blueShaderFragmentSrc = R"(
+		std::string flatColorShaderFragmentSrc = R"(
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
 
 			in vec3 v_Position;
-			in vec3 v_Color;
+
+			uniform vec4 u_Color;
 
 			void main()
 			{
-				color = vec4(0.2, 0.3, 0.8, 1.0);
+				color = u_Color;
 			}
 		)";
 
-		m_BlueShader.reset(new Sky::Shader(blueShaderVertexSrc, blueShaderFragmentSrc));
+		m_FlatColorShader.reset(Sky::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
 	}
 
 	void OnUpdate(Sky::Timestep ts) override
 	{
+		if (Sky::Input::IsKeyPressed(SKY_KEY_LEFT))
+			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
+		else if (Sky::Input::IsKeyPressed(SKY_KEY_RIGHT))
+			m_CameraPosition.x += m_CameraMoveSpeed * ts;
+
+		if (Sky::Input::IsKeyPressed(SKY_KEY_UP))
+			m_CameraPosition.y += m_CameraMoveSpeed * ts;
+		else if (Sky::Input::IsKeyPressed(SKY_KEY_DOWN))
+			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
+
+		if (Sky::Input::IsKeyPressed(SKY_KEY_A))
+			m_CameraRotation += m_CameraMoveSpeed * ts;
+		else if (Sky::Input::IsKeyPressed(SKY_KEY_D))
+			m_CameraRotation -= m_CameraMoveSpeed * ts;
+
 		Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Sky::RenderCommand::Clear();
 
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
+
 		Sky::Renderer::BeginScene(m_Camera);
+		
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_SquarePosition);
+		std::dynamic_pointer_cast<Sky::OpenGLShader>(m_FlatColorShader)->Bind();
+		std::dynamic_pointer_cast<Sky::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 
-		Sky::Renderer::Submit(m_BlueShader, m_SquareVA, transform);
+		for (int y = 0; y < 20; y++)
+		{
+			for (int x = 0; x < 20; x++) 
+			{
+				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+				Sky::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+			}
+		}
+
 		Sky::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Sky::Renderer::EndScene();
@@ -141,6 +176,9 @@ public:
 
 	virtual void OnImGuiRender() override 
 	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
 	void OnEvent(Sky::Event& event) override 
@@ -151,10 +189,15 @@ private:
 	std::shared_ptr<Sky::Shader> m_Shader;
 	std::shared_ptr<Sky::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Sky::Shader> m_BlueShader;
+	std::shared_ptr<Sky::Shader> m_FlatColorShader;
 	std::shared_ptr<Sky::VertexArray> m_SquareVA;
 
 	Sky::OrthographicCamera m_Camera;
+	glm::vec3 m_CameraPosition;
+	glm::vec4 m_SquareColor;
+
+	float m_CameraRotation = 0.0f;
+	float m_CameraMoveSpeed = 10.0f;
 
 	glm::vec3 m_SquarePosition;
 };

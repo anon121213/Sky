@@ -7,17 +7,26 @@
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform\Windows">
       <UniqueIdentifier>{5B054582-4794-CE4B-F0B2-E246DC20DFF1}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sky">
       <UniqueIdentifier>{D3AE2FA9-3F8E-AE44-48A6-391BB40415A6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Sky\Core">
+      <UniqueIdentifier>{0B0FD68F-F771-6534-A0F7-9DEA8C3931B7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Sky\Events">
       <UniqueIdentifier>{570FB8E2-43DD-ABE8-2C71-1C0F18DE874D}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Sky\ImGui">
       <UniqueIdentifier>{3DB6028B-A976-7EC1-72B1-C73EDE30C39D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Sky\Renderer">
+      <UniqueIdentifier>{D94FF467-C548-13BA-EE7A-F83EDAD2F2C5}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -42,6 +51,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\Windows\WindowsInput.h">
       <Filter>src\Platform\Windows</Filter>
     </ClInclude>
@@ -56,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="src\Sky\Core.h">
       <Filter>src\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\Timestep.h">
+      <Filter>src\Sky\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\EntryPoint.h">
       <Filter>src\Sky</Filter>
@@ -92,6 +116,30 @@
     </ClInclude>
     <ClInclude Include="src\Sky\MouseButtonCodes.h">
       <Filter>src\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\Buffer.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\GraphicsContext.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\OrthographicCamera.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\RenderCommand.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\Renderer.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\RendererAPI.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\Shader.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\VertexArray.h">
+      <Filter>src\Sky\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\Window.h">
       <Filter>src\Sky</Filter>
@@ -1356,21 +1404,20 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Sky\Renderer\Shader.h" />
-    <ClInclude Include="src\Sky\Renderer\Buffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="src\Sky\Renderer\Renderer.h" />
-    <ClInclude Include="src\Sky\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Sky\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Sky\Renderer\RenderCommand.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\Sky\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\Sky\Core\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Windows\WindowsInput.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
@@ -1395,19 +1442,29 @@
     <ClCompile Include="src\Sky\Log.cpp">
       <Filter>src\Sky</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\Buffer.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\RenderCommand.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\Renderer.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\RendererAPI.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\Shader.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\VertexArray.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\skypch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Sky\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Sky\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\Sky\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Sky\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Sky\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Sky\Renderer\RenderCommand.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\Sky\Renderer\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>
