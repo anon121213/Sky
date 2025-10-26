@@ -22,7 +22,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.0f, 1.0f
 		};
 
-		std::shared_ptr<Sky::VertexBuffer> vertexBuffer;
+		Sky::Ref<Sky::VertexBuffer> vertexBuffer;
 		vertexBuffer.reset(Sky::VertexBuffer::Create(vertices, sizeof(vertices)));
 		Sky::BufferLayout layout = {
 			{Sky::ShaderDataType::Float3, "a_Position"},
@@ -32,7 +32,7 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		std::shared_ptr<Sky::IndexBuffer> indexBuffer;
+		Sky::Ref<Sky::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Sky::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
@@ -45,7 +45,7 @@ public:
 			-0.75f,  0.75f, 0.0f,
 		};
 
-		std::shared_ptr<Sky::VertexBuffer> squareVB;
+		Sky::Ref<Sky::VertexBuffer> squareVB;
 		squareVB.reset(Sky::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
 			{Sky::ShaderDataType::Float3, "a_Position"},
@@ -53,7 +53,7 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Sky::IndexBuffer> squareIB;
+		Sky::Ref<Sky::IndexBuffer> squareIB;
 		squareIB.reset(Sky::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
@@ -163,7 +163,7 @@ public:
 		{
 			for (int x = 0; x < 20; x++) 
 			{
-				glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+				glm::vec3 pos(x * 0.16f, y * 0.16f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				Sky::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 			}
@@ -186,11 +186,11 @@ public:
 	}
 
 private:
-	std::shared_ptr<Sky::Shader> m_Shader;
-	std::shared_ptr<Sky::VertexArray> m_VertexArray;
+	Sky::Ref<Sky::Shader> m_Shader;
+	Sky::Ref<Sky::VertexArray> m_VertexArray;
 
-	std::shared_ptr<Sky::Shader> m_FlatColorShader;
-	std::shared_ptr<Sky::VertexArray> m_SquareVA;
+	Sky::Ref<Sky::Shader> m_FlatColorShader;
+	Sky::Ref<Sky::VertexArray> m_SquareVA;
 
 	Sky::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
