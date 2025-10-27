@@ -226,7 +226,7 @@ public:
 
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 
-		static char texturePath[256] = "assets/textures/Checkerboard.jpg";
+		static char texturePath[256] = "assets/textures/Checkerboard.png";
 
 		ImGui::InputText("Texture Path", texturePath, IM_ARRAYSIZE(texturePath));
 		if (ImGui::Button("Load Texture"))
