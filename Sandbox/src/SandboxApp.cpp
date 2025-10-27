@@ -94,7 +94,7 @@ public:
 			}
 		)";
 
-		m_Shader.reset(Sky::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Sky::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -128,14 +128,14 @@ public:
 			}
 		)";
 
-		m_FlatColorShader.reset(Sky::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+		m_FlatColorShader = Sky::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-		m_TextureShader.reset(Sky::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 		m_Texture = Sky::Texture2D::Create("assets/textures/Checkerboard.png");
 
-		std::dynamic_pointer_cast<Sky::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Sky::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Sky::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Sky::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Sky::Timestep ts) override
@@ -178,8 +178,10 @@ public:
 			}
 		}
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+
 		m_Texture->Bind();
-		Sky::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+		Sky::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
 
 		// Triangle
 		// Sky::Renderer::Submit(m_Shader, m_VertexArray);
@@ -211,10 +213,11 @@ public:
 	}
 
 private:
+	Sky::ShaderLibrary m_ShaderLibrary;
 	Sky::Ref<Sky::Shader> m_Shader;
 	Sky::Ref<Sky::VertexArray> m_VertexArray;
 
-	Sky::Ref<Sky::Shader> m_FlatColorShader, m_TextureShader;
+	Sky::Ref<Sky::Shader> m_FlatColorShader;
 	Sky::Ref<Sky::VertexArray> m_SquareVA;
 
 	Sky::Ref<Sky::Texture2D> m_Texture;

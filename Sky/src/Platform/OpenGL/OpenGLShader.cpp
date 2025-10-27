@@ -23,9 +23,16 @@ namespace Sky {
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		auto lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = filepath.rfind('.');
+		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -45,14 +52,14 @@ namespace Sky {
 
 		if (!in.is_open()) {
 			SKY_CORE_ERROR("Could not open shader file '{0}'", filepath);
-			return "";
+			return result;
 		}
 
 		in.seekg(0, std::ios::end);
 		size_t size = in.tellg();
 		if (size == -1 || size == 0) {
 			SKY_CORE_ERROR("Shader file '{0}' is empty or unreadable", filepath);
-			return "";
+			return result;
 		}
 
 		result.resize(size);
@@ -110,7 +117,9 @@ namespace Sky {
 		}
 
 		GLint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		SKY_CORE_ASSERT(shaderSources <= 2, "We only support 2 shaders right now")
+		std::array<GLenum, 2> glShaderIDs;
+		int glShaderIDIndex = 0;
 
 		for (auto& kv : shaderSources) 
 		{
@@ -142,9 +151,10 @@ namespace Sky {
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
+		m_RendererID = program;
 		glLinkProgram(program);
 
 		GLint isLinked = 0;
@@ -163,14 +173,12 @@ namespace Sky {
 				glDeleteShader(id);
 
 			SKY_CORE_ERROR("{0}", infoLog.data());
-			SKY_CORE_ASSERT(false, "Shader link failure!")
-				return;
+			SKY_CORE_ASSERT(false, "Shader link failure!");
+			return;
 		}
 
 		for (auto id : glShaderIDs)
 			glDetachShader(program, id);
-
-		m_RendererID = program;
 	}
 
 	void OpenGLShader::Bind() const
