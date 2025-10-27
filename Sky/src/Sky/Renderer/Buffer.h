@@ -6,7 +6,7 @@ namespace Sky {
 	{
 		None = 0,
 		Float,
-		float2,
+		Float2,
 		Float3,
 		Float4,
 		Mat3,
@@ -23,7 +23,7 @@ namespace Sky {
 		switch (type)
 		{
 			case ShaderDataType::Float:     return 4;
-			case ShaderDataType::float2:	return 4 * 2;
+			case ShaderDataType::Float2:	return 4 * 2;
 			case ShaderDataType::Float3:	return 4 * 3;
 			case ShaderDataType::Float4:	return 4 * 4;
 			case ShaderDataType::Mat3:		return 4 * 3 * 3;
@@ -59,7 +59,7 @@ namespace Sky {
 			switch (Type)
 			{
 				case ShaderDataType::Float:     return 1;
-				case ShaderDataType::float2:	return 2;
+				case ShaderDataType::Float2:	return 2;
 				case ShaderDataType::Float3:	return 3;
 				case ShaderDataType::Float4:	return 4;
 				case ShaderDataType::Mat3:		return 3 * 3;

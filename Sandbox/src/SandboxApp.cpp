@@ -1,4 +1,4 @@
-#include <Sky.h>
+﻿#include <Sky.h>
 
 #include "imgui/imgui.h"
 
@@ -7,6 +7,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLTexture.h"
 
 class ExampleLayer : public Sky::Layer 
 {
@@ -38,18 +39,19 @@ public:
 
 		m_SquareVA.reset(Sky::VertexArray::Create());
 
-		float squareVertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f,
+		float squareVertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 		};
 
 		Sky::Ref<Sky::VertexBuffer> squareVB;
 		squareVB.reset(Sky::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
-			{Sky::ShaderDataType::Float3, "a_Position"},
-			});
+			{ Sky::ShaderDataType::Float3, "a_Position" },
+			{ Sky::ShaderDataType::Float2, "a_TexCoord" },
+		});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -127,6 +129,46 @@ public:
 		)";
 
 		m_FlatColorShader.reset(Sky::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+		std::string textureShaderVertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);	
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;			
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(Sky::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+
+		m_Texture = Sky::Texture2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<Sky::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<Sky::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Sky::Timestep ts) override
@@ -163,23 +205,39 @@ public:
 		{
 			for (int x = 0; x < 20; x++) 
 			{
-				glm::vec3 pos(x * 0.16f, y * 0.16f, 0.0f);
+				glm::vec3 pos(x * 0.11f, y * 0.16f, 0.0f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 				Sky::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 			}
 		}
 
-		Sky::Renderer::Submit(m_Shader, m_VertexArray);
+		m_Texture->Bind();
+		Sky::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+
+		// Triangle
+		// Sky::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Sky::Renderer::EndScene();
 	}
 
-	virtual void OnImGuiRender() override 
+	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Settings");
+
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+
+		static char texturePath[256] = "assets/textures/Checkerboard.jpg";
+
+		ImGui::InputText("Texture Path", texturePath, IM_ARRAYSIZE(texturePath));
+		if (ImGui::Button("Load Texture"))
+		{
+			m_Texture = Sky::Texture2D::Create(texturePath);
+		}
+
+
 		ImGui::End();
 	}
+
 
 	void OnEvent(Sky::Event& event) override 
 	{
@@ -189,8 +247,10 @@ private:
 	Sky::Ref<Sky::Shader> m_Shader;
 	Sky::Ref<Sky::VertexArray> m_VertexArray;
 
-	Sky::Ref<Sky::Shader> m_FlatColorShader;
+	Sky::Ref<Sky::Shader> m_FlatColorShader, m_TextureShader;
 	Sky::Ref<Sky::VertexArray> m_SquareVA;
+
+	Sky::Ref<Sky::Texture2D> m_Texture;
 
 	Sky::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;

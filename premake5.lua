@@ -15,6 +15,7 @@ IncludeDir["GLFW"] = "Sky/vendor/GLFW/include"
 IncludeDir["Glad"] = "Sky/vendor/Glad/include"
 IncludeDir["ImGui"] = "Sky/vendor/imgui"
 IncludeDir["glm"] = "Sky/vendor/glm"
+IncludeDir["stb_image"] = "Sky/vendor/stb_image"
 
 include "Sky/vendor/GLFW"
 include "Sky/vendor/Glad"
@@ -36,6 +37,8 @@ project "Sky"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",
+		"%{prj.name}/vendor/stb_image/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
@@ -51,6 +54,7 @@ project "Sky"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links {
