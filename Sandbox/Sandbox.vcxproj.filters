@@ -7,11 +7,17 @@
     <Filter Include="Assets">
       <UniqueIdentifier>{21ee749e-1a00-4107-8b11-2d59bca1233c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\Textures">
+    <Filter Include="Assets\shaders">
+      <UniqueIdentifier>{959511d1-1f5d-4205-93df-20c4121eed2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\textures">
       <UniqueIdentifier>{e2af47ec-95f8-49a8-a778-e23957409810}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\assets\textures\Checkerboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\Texture.glsl" />
   </ItemGroup>
 </Project>

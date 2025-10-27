@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Sky/Renderer/Shader.h"
-
 #include <glm/glm.hpp>
 
 typedef int GLint;
+typedef unsigned int GLenum;
 
 namespace Sky {
 
@@ -12,6 +12,7 @@ namespace Sky {
 	{
 	public:
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& filePath);
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
@@ -29,6 +30,9 @@ namespace Sky {
 
 	private:
 		GLint GetUniformLocation(const std::string& name) const;
+		std::string ReadFile(const std::string& file);
+		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t m_RendererID;
 		mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
