@@ -1,9 +1,8 @@
 #include "WindowsInput.h"
 #include "skypch.h"
-#include "WindowsInput.h"
 
 #include <GLFW/glfw3.h>
-#include "Sky/Application.h"
+#include "Sky/Core/Application.h"
 
 namespace Sky {
 

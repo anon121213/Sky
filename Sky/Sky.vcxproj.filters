@@ -81,17 +81,38 @@
     <ClInclude Include="src\Sky.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Application.h">
-      <Filter>src\Sky</Filter>
+    <ClInclude Include="src\Sky\Core\Application.h">
+      <Filter>src\Sky\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Core.h">
-      <Filter>src\Sky</Filter>
+    <ClInclude Include="src\Sky\Core\Core.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\EntryPoint.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\Input.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\KeyCodes.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\Layer.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\LayerStack.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\Log.h">
+      <Filter>src\Sky\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Core\MouseButtonCodes.h">
+      <Filter>src\Sky\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\Core\Timestep.h">
       <Filter>src\Sky\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\EntryPoint.h">
-      <Filter>src\Sky</Filter>
+    <ClInclude Include="src\Sky\Core\Window.h">
+      <Filter>src\Sky\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\Events\ApplicationEvent.h">
       <Filter>src\Sky\Events</Filter>
@@ -108,24 +129,6 @@
     <ClInclude Include="src\Sky\ImGui\ImGuiLayer.h">
       <Filter>src\Sky\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\Input.h">
-      <Filter>src\Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sky\KeyCodes.h">
-      <Filter>src\Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sky\Layer.h">
-      <Filter>src\Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sky\LayerStack.h">
-      <Filter>src\Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sky\Log.h">
-      <Filter>src\Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sky\MouseButtonCodes.h">
-      <Filter>src\Sky</Filter>
-    </ClInclude>
     <ClInclude Include="src\Sky\Renderer\Buffer.h">
       <Filter>src\Sky\Renderer</Filter>
     </ClInclude>
@@ -133,6 +136,9 @@
       <Filter>src\Sky\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\Renderer\OrthographicCamera.h">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sky\Renderer\OrthographicCameraController.h">
       <Filter>src\Sky\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Sky\Renderer\RenderCommand.h">
@@ -152,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="src\Sky\Renderer\VertexArray.h">
       <Filter>src\Sky\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Sky\Window.h">
-      <Filter>src\Sky</Filter>
     </ClInclude>
     <ClInclude Include="src\skypch.h">
       <Filter>src</Filter>
@@ -1419,7 +1422,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Sky\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1446,8 +1448,17 @@
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp">
       <Filter>src\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sky\Application.cpp">
-      <Filter>src\Sky</Filter>
+    <ClCompile Include="src\Sky\Core\Application.cpp">
+      <Filter>src\Sky\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Core\Layer.cpp">
+      <Filter>src\Sky\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Core\LayerStack.cpp">
+      <Filter>src\Sky\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Core\Log.cpp">
+      <Filter>src\Sky\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Sky\ImGui\ImGuiBuild.cpp">
       <Filter>src\Sky\ImGui</Filter>
@@ -1455,19 +1466,13 @@
     <ClCompile Include="src\Sky\ImGui\ImGuiLayer.cpp">
       <Filter>src\Sky\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sky\Layer.cpp">
-      <Filter>src\Sky</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Sky\LayerStack.cpp">
-      <Filter>src\Sky</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Sky\Log.cpp">
-      <Filter>src\Sky</Filter>
-    </ClCompile>
     <ClCompile Include="src\Sky\Renderer\Buffer.cpp">
       <Filter>src\Sky\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Sky\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Sky\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sky\Renderer\OrthographicCameraController.cpp">
       <Filter>src\Sky\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Sky\Renderer\RenderCommand.cpp">
@@ -1494,6 +1499,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sky\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

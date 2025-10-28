@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Sky/Core.h"
+#include "Sky/Core/Core.h"
 
 namespace Sky {
 

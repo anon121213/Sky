@@ -5,7 +5,7 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 
-#include "Sky/Application.h"
+#include "Sky/Core/Application.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"

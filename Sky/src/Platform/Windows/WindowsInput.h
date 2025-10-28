@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sky/Input.h"
+#include "Sky/Core/Input.h"
 
 namespace Sky {
 
