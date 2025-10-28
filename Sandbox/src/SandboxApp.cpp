@@ -196,6 +196,11 @@ public:
 	void OnEvent(Sky::Event& event) override 
 	{
 		m_CameraController.OnEvent(event);
+
+		if (event.GetEventType() == Sky::EventType::WindowResize) {
+			auto& re = (Sky::WindowResizeEvent&)event;
+			re.GetWidth()
+		}
 	}
 
 private:
