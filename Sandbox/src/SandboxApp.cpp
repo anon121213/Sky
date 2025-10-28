@@ -13,7 +13,7 @@ class ExampleLayer : public Sky::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f), m_SquareColor(0.8f, 0.2f, 0.3f, 1.0f)
+		: Layer("Example"), m_CameraController (1280.0f / 720.f)
 	{
 		m_VertexArray.reset(Sky::VertexArray::Create());
 
@@ -140,28 +140,14 @@ public:
 
 	void OnUpdate(Sky::Timestep ts) override
 	{
-		if (Sky::Input::IsKeyPressed(SKY_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		else if (Sky::Input::IsKeyPressed(SKY_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
+		//  Update
+		m_CameraController.OnUpdate(ts);
 
-		if (Sky::Input::IsKeyPressed(SKY_KEY_UP))
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		else if (Sky::Input::IsKeyPressed(SKY_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-
-		if (Sky::Input::IsKeyPressed(SKY_KEY_A))
-			m_CameraRotation += m_CameraMoveSpeed * ts;
-		else if (Sky::Input::IsKeyPressed(SKY_KEY_D))
-			m_CameraRotation -= m_CameraMoveSpeed * ts;
-
+		// Render
 		Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Sky::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
-
-		Sky::Renderer::BeginScene(m_Camera);
+		Sky::Renderer::BeginScene(m_CameraController.GetCamera());
 		
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -185,7 +171,6 @@ public:
 
 		// Triangle
 		// Sky::Renderer::Submit(m_Shader, m_VertexArray);
-
 		Sky::Renderer::EndScene();
 	}
 
@@ -210,6 +195,7 @@ public:
 
 	void OnEvent(Sky::Event& event) override 
 	{
+		m_CameraController.OnEvent(event);
 	}
 
 private:
@@ -222,12 +208,8 @@ private:
 
 	Sky::Ref<Sky::Texture2D> m_Texture;
 
-	Sky::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
-	glm::vec4 m_SquareColor;
-
-	float m_CameraRotation = 0.0f;
-	float m_CameraMoveSpeed = 10.0f;
+	Sky::OrthographicCameraController m_CameraController;
+	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 	glm::vec3 m_SquarePosition;
 };

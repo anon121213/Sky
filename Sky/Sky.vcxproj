@@ -169,6 +169,7 @@
     <ClInclude Include="src\Sky\LayerStack.h" />
     <ClInclude Include="src\Sky\Log.h" />
     <ClInclude Include="src\Sky\MouseButtonCodes.h" />
+    <ClInclude Include="src\Sky\OrthographicCameraController.h" />
     <ClInclude Include="src\Sky\Renderer\Buffer.h" />
     <ClInclude Include="src\Sky\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Sky\Renderer\OrthographicCamera.h" />
@@ -620,6 +621,7 @@
     <ClCompile Include="src\Sky\Layer.cpp" />
     <ClCompile Include="src\Sky\LayerStack.cpp" />
     <ClCompile Include="src\Sky\Log.cpp" />
+    <ClCompile Include="src\Sky\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Sky\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Sky\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Sky\Renderer\RenderCommand.cpp" />
