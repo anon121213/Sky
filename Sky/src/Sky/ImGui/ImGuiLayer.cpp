@@ -7,7 +7,6 @@
 
 #include "Sky/Core/Application.h"
 
-#include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
 namespace Sky {
@@ -17,10 +16,6 @@ namespace Sky {
 	{
 	}
 	
-	ImGuiLayer::~ImGuiLayer()
-	{
-	}
-
 	void ImGuiLayer::OnAttach() 
 	{
 		IMGUI_CHECKVERSION();
@@ -69,7 +64,7 @@ namespace Sky {
 	void ImGuiLayer::End() {
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		Application& app = Application::Get();
-		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+		io.DisplaySize = ImVec2(static_cast<float>(app.GetWindow().GetWidth()), static_cast<float>(app.GetWindow().GetHeight()));
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -85,8 +80,6 @@ namespace Sky {
 
 	void ImGuiLayer::OnImGuiRender() 
 	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
 	}
 
 }

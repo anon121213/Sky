@@ -1,5 +1,5 @@
-#include "WindowsInput.h"
 #include "skypch.h"
+#include "WindowsInput.h"
 
 #include <GLFW/glfw3.h>
 #include "Sky/Core/Application.h"

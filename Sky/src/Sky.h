@@ -27,7 +27,3 @@
 #include "Sky/Renderer/VertexArray.h"
 
 #include "Sky/Renderer/OrthographicCamera.h"
-
-// Entry point
-
-#include "Sky/Core/EntryPoint.h"
