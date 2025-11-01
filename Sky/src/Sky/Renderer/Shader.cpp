@@ -11,7 +11,7 @@ namespace Sky {
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:     SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!"); return nullptr;
-			case RendererAPI::API::OpenGL:   return std::make_shared<OpenGLShader>(filePath);
+			case RendererAPI::API::OpenGL:   return CreateRef<OpenGLShader>(filePath);
 		}
 
 		SKY_CORE_ASSERT(false, "Unknown RenderAPI!")
@@ -23,7 +23,7 @@ namespace Sky {
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:     SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!"); return nullptr;
-			case RendererAPI::API::OpenGL:   return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+			case RendererAPI::API::OpenGL:   return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
 		SKY_CORE_ASSERT(false, "Unknown RenderAPI!")
