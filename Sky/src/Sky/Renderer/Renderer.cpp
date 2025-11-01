@@ -1,23 +1,25 @@
 #include "skypch.h"
 #include "Renderer.h"
 
+#include "Renderer2D.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sky {
 	
-	Renderer::SceneData* Renderer::m_SceneData = new SceneData;
+	Scope<Renderer::SceneData> Renderer::m_SceneData = std::make_unique<SceneData>();
 
 	void Renderer::Init() 
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
 	}
 
-	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	void Renderer::OnWindowResize(const uint32_t width, const uint32_t height)
 	{
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(OrthographicCamera& camera)
+	void Renderer::BeginScene(const OrthographicCamera& camera)
 	{
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}

@@ -24,8 +24,7 @@ public:
 			0.0f, 0.5f, 0.0f, 0.8f, 0.8f, 0.0f, 1.0f
 		};
 
-		Sky::Ref<Sky::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Sky::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Sky::Ref<Sky::VertexBuffer> vertexBuffer = Sky::VertexBuffer::Create(vertices, sizeof(vertices));
 		Sky::BufferLayout layout = {
 			{Sky::ShaderDataType::Float3, "a_Position"},
 			{Sky::ShaderDataType::Float4, "a_Color"}
@@ -34,8 +33,7 @@ public:
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 
 		uint32_t indices[3] = {0, 1, 2};
-		Sky::Ref<Sky::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Sky::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Sky::Ref<Sky::IndexBuffer> indexBuffer = Sky::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
 
 		m_SquareVA = Sky::VertexArray::Create();
@@ -47,8 +45,7 @@ public:
 			-0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 		};
 
-		Sky::Ref<Sky::VertexBuffer> squareVB;
-		squareVB.reset(Sky::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Sky::Ref<Sky::VertexBuffer> squareVB = Sky::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->SetLayout({
 			{Sky::ShaderDataType::Float3, "a_Position"},
 			{Sky::ShaderDataType::Float2, "a_TexCoord"},
@@ -56,8 +53,7 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
-		Sky::Ref<Sky::IndexBuffer> squareIB;
-		squareIB.reset(Sky::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Sky::Ref<Sky::IndexBuffer> squareIB = Sky::IndexBuffer::Create(squareIndices,sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrc = R"(

@@ -19,6 +19,7 @@
 // Renderer
 
 #include "Sky/Renderer/Renderer.h"
+#include "Sky/Renderer/Renderer2D.h"
 #include "Sky/Renderer/RenderCommand.h"
 
 #include "Sky/Renderer/Buffer.h"

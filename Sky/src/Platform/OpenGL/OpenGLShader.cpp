@@ -109,7 +109,7 @@ namespace Sky {
 	}
 
 
-	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
+	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
 		if (shaderSources.empty()) {
 			SKY_CORE_ERROR("No shader sources to compile — skipping shader creation!");
@@ -158,7 +158,7 @@ namespace Sky {
 		glLinkProgram(program);
 
 		GLint isLinked = 0;
-		glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+		glGetProgramiv(program, GL_LINK_STATUS, static_cast<int*>(&isLinked));
 		if (isLinked == GL_FALSE)
 		{
 			GLint maxLength = 0;
@@ -191,6 +191,21 @@ namespace Sky {
 		glUseProgram(0);
 	}
 
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
+	{
+		UploadUniformFloat3(name, value);
+	}
+
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
+	{
+		UploadUniformFloat4(name, value);
+	}
+
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
+	{
+		UploadUniformMat4(name, value);
+	}
+
 	GLint OpenGLShader::GetUniformLocation(const std::string& name) const
 	{
 		auto it = m_UniformLocationCache.find(name);
@@ -209,43 +224,43 @@ namespace Sky {
 		return location;
 	}
 
-	void OpenGLShader::UploadUniformInt(const std::string& name, const int value)
+	void OpenGLShader::UploadUniformInt(const std::string& name, const int value) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniform1i(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat(const std::string& name, float value)
+	void OpenGLShader::UploadUniformFloat(const std::string& name, float value) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniform1f(location, value);
 	}
 
-	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
+	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniform2f(location, value.x, value.y);
 	}
 
-	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
+	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
-	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
+	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 
-	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+	void OpenGLShader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
-	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix) const
 	{
 		GLint location = GetUniformLocation(name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
