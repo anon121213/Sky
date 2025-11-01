@@ -5,6 +5,7 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Sky {
+
 	Ref<Shader> Shader::Create(const std::string& filePath)
 	{
 		switch (Renderer::GetAPI())
@@ -41,14 +42,14 @@ namespace Sky {
 		Add(name, shader);
 	}
 
-	Ref<Shader> ShaderLibrary::Load(const std::string filepath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);
 		Add(shader); 
 		return shader;
 	}
 
-	Ref<Shader> ShaderLibrary::Load(const std::string name, const std::string& filepath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);
 		Add(name, shader);
