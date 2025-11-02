@@ -15,7 +15,8 @@
 
 #include "Sky/Core/Log.h"
 
+#include "Sky/Debug/Instrumentor.h"
+
 #ifdef SKY_PLATFORM_WINDOWS 
 	#include <Windows.h>
 #endif 
-

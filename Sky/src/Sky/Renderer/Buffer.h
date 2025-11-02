@@ -18,7 +18,7 @@ namespace Sky {
 		Bool
 	};
 
-	static uint32_t ShaderDataTypeSize(ShaderDataType type)
+	static uint32_t ShaderDataTypeSize(const ShaderDataType type)
 	{
 		switch (type)
 		{
@@ -47,10 +47,10 @@ namespace Sky {
 		uint32_t Size;
 		bool Normalized;
 
-		BufferElement() {}
+		BufferElement() = default;
 
-		BufferElement(ShaderDataType type, const std::string& name, bool normalized = false)
-			:Name(name), Type(type), Size(ShaderDataTypeSize(type)), Offset(0), Normalized(normalized)
+		BufferElement(ShaderDataType type, std::string name, bool normalized = false)
+			:Name(std::move(name)), Type(type), Offset(0), Size(ShaderDataTypeSize(type)), Normalized(normalized)
 		{
 		}
 
@@ -78,7 +78,7 @@ namespace Sky {
 
 	class BufferLayout {
 	public:
-		BufferLayout() {}
+		BufferLayout() = default;
 
 		BufferLayout(const std::initializer_list<BufferElement>& elements)
 			: m_Elements(elements) 
@@ -112,7 +112,7 @@ namespace Sky {
 	class VertexBuffer
 	{
 	public:
-		virtual ~VertexBuffer() {};
+		virtual ~VertexBuffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;

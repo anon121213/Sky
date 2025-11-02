@@ -13,9 +13,8 @@ namespace Sky {
 
 		void OnAttach() override;
 		void OnDetach() override;
-		void OnImGuiRender() override;
 
-		static void Begin();
+		void Begin();
 		void End();
 	private:
 		float m_Time = 0.0f;

@@ -10,8 +10,15 @@ namespace Sky {
 
 	void Renderer::Init() 
 	{
+		SKY_PROFILE_FUNCTION();
 		RenderCommand::Init();
 		Renderer2D::Init();
+	}
+
+	void Renderer::Shutdown()
+	{
+		SKY_PROFILE_FUNCTION();
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(const uint32_t width, const uint32_t height)

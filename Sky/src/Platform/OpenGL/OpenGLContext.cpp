@@ -15,6 +15,7 @@ namespace Sky {
 
 	void OpenGLContext::Init()
 	{
+		SKY_PROFILE_FUNCTION();
 		glfwMakeContextCurrent(m_WindowHandle);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		SKY_CORE_ASSERT(status, "Falied to intialize GLAD!");
@@ -26,7 +27,7 @@ namespace Sky {
 
 	void OpenGLContext::SwapBuffers() 
 	{
-
+		SKY_PROFILE_FUNCTION();
 		glfwSwapBuffers(m_WindowHandle);
 	}
 }

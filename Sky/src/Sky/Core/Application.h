@@ -26,13 +26,13 @@ namespace Sky {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline static Application& Get() { return *s_Instance; }
-		inline Window& GetWindow() { return *m_Window; }
+		static Application& Get() { return *s_Instance; }
+		Window& GetWindow() const { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
-		bool OnWindowRedsize(WindowResizeEvent& e);
+		bool OnWindowResized(WindowResizeEvent& e);
 	private:
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

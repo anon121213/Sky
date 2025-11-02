@@ -20,20 +20,22 @@ namespace Sky {
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
-		std::string source = ReadFile(filepath);
-		auto shaderSources = PreProcess(source);
+		SKY_PROFILE_FUNCTION();
+		const std::string source = ReadFile(filepath);
+		const auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
 
 		auto lastSlash = filepath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = filepath.rfind('.');
-		auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		const auto lastDot = filepath.rfind('.');
+		const auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
 		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
-		: m_Name(name)
+	OpenGLShader::OpenGLShader(std::string name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_Name(std::move(name))
 	{
+		SKY_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -42,11 +44,13 @@ namespace Sky {
 
 	OpenGLShader::~OpenGLShader()
 	{
+		SKY_PROFILE_FUNCTION();
 		glDeleteProgram(m_RendererID);
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		SKY_PROFILE_FUNCTION();
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
@@ -72,9 +76,10 @@ namespace Sky {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		SKY_PROFILE_FUNCTION();
 		std::unordered_map<GLenum, std::string> shaderSources;
 
-		const char* typeToken = "#type";
+		const auto typeToken = "#type";
 		size_t pos = source.find(typeToken, 0);
 
 		if (pos == std::string::npos) 
@@ -83,19 +88,19 @@ namespace Sky {
 			return shaderSources;
 		}
 
-		size_t typeTokenLength = strlen(typeToken);
+		const size_t typeTokenLength = strlen(typeToken);
 		while (pos != std::string::npos)
 		{
-			size_t eol = source.find_first_of("\r\n", pos);
+			const size_t eol = source.find_first_of("\r\n", pos);
 			SKY_CORE_ASSERT(eol != std::string::npos, "Syntax error after #type");
 
-			size_t begin = pos + typeTokenLength + 1;
+			const size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
 
 			GLenum shaderType = ShaderTypeFromString(type);
 			SKY_CORE_ASSERT(shaderType, "Invalid shader type specified");
 
-			size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+			const size_t nextLinePos = source.find_first_not_of("\r\n", eol);
 			pos = source.find(typeToken, nextLinePos);
 
 			shaderSources[shaderType] =
@@ -111,6 +116,7 @@ namespace Sky {
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		SKY_PROFILE_FUNCTION();
 		if (shaderSources.empty()) {
 			SKY_CORE_ERROR("No shader sources to compile — skipping shader creation!");
 			return;
@@ -183,41 +189,46 @@ namespace Sky {
 
 	void OpenGLShader::Bind() const
 	{
+		SKY_PROFILE_FUNCTION();
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+		SKY_PROFILE_FUNCTION();
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, const int value)
 	{
+		SKY_PROFILE_FUNCTION();
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
+		SKY_PROFILE_FUNCTION();
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
+		SKY_PROFILE_FUNCTION();
 		UploadUniformFloat4(name, value);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		SKY_PROFILE_FUNCTION();
 		UploadUniformMat4(name, value);
 	}
 
 	GLint OpenGLShader::GetUniformLocation(const std::string& name) const
 	{
-		auto it = m_UniformLocationCache.find(name);
-		if (it != m_UniformLocationCache.end())
+		if (const auto it = m_UniformLocationCache.find(name); it != m_UniformLocationCache.end())
 			return it->second;
 
-		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		const GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 
 		if (location == -1)
 		{

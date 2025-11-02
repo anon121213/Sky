@@ -5,7 +5,7 @@
 class Sandbox2D : public Sky::Layer {
 public:
 	Sandbox2D();
-	virtual ~Sandbox2D() = default;
+	~Sandbox2D() override = default;
 
 	void OnAttach() override;
 	void OnDetach() override;

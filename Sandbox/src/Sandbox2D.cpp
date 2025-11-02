@@ -10,33 +10,44 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
+	SKY_PROFILE_FUNCTION();
 	m_CheckerboardTexture = Sky::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
 {
+	SKY_PROFILE_FUNCTION();
 }
 
 void Sandbox2D::OnUpdate(Sky::Timestep ts)
 {
+	SKY_PROFILE_FUNCTION();
 	//  Update
 	m_CameraController.OnUpdate(ts);
 
 	// Render
-	Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
-	Sky::RenderCommand::Clear();
+	{
+		SKY_PROFILE_SCOPE("Renderer Prep");
+		Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		Sky::RenderCommand::Clear();
+	}
 
-	Sky::Renderer2D::BeginScene(m_CameraController.GetCamera());
-	Sky::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-	Sky::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-	Sky::Renderer2D::DrawQuad({ 0.2f, 0.5f, }, { 10.5f, 10.5f }, m_CheckerboardTexture);
-	Sky::Renderer2D::EndScene();
+	{
+		SKY_PROFILE_SCOPE("Renderer Draw");
+		Sky::Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Sky::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+		Sky::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+		Sky::Renderer2D::DrawQuad({ 0.2f, 0.5f, }, { 10.5f, 10.5f }, m_CheckerboardTexture);
+		Sky::Renderer2D::EndScene();
+	}
 }
 
 void Sandbox2D::OnImGuiRender()
 {
+	SKY_PROFILE_FUNCTION();
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+
 	ImGui::End();
 }
 

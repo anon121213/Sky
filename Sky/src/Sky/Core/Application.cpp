@@ -13,10 +13,11 @@ namespace Sky {
 
 	Application::Application()
 	{
+		SKY_PROFILE_FUNCTION();
 		SKY_CORE_ASSERT(!s_Instance, "Application already exists!")
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = Window::Create();
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		Renderer::Init();
@@ -27,53 +28,66 @@ namespace Sky {
 
 	Application::~Application()
 	{
-
-	}
-
-	void Application::OnEvent(Event& e)
-	{
-		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClosed));
-		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowRedsize));
-
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
-		{
-			(*--it)->OnEvent(e); 
-			if (e.Handled)
-				break;
-		}
+		SKY_PROFILE_FUNCTION();
+		Renderer::Shutdown();
 	}
 
 	void Application::PushLayer(Layer* layer)
 	{
+		SKY_PROFILE_FUNCTION();
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
+		SKY_PROFILE_FUNCTION();
 		m_LayerStack.PushOverlay(layer);
 		layer->OnAttach();
 	}
 
+	void Application::OnEvent(Event& e)
+	{
+		SKY_PROFILE_FUNCTION();
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClosed));
+		dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResized));
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+		{
+			(*--it)->OnEvent(e);
+			if (e.Handled)
+				break;
+		}
+	}
+
 	void Application::Run()
 	{
+		SKY_PROFILE_FUNCTION();
 		while (m_Running) 
 		{
-			float time = (float)glfwGetTime(); // Platform::GetTime()
-			Timestep timestep = time - m_LastFrameTime;
+			SKY_PROFILE_SCOPE("RunLoop");
+			const float time = static_cast<float>(glfwGetTime()); // Platform::GetTime()
+			const Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if (!m_Minimized)
 			{
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(timestep);
-			}
+				{
+					SKY_PROFILE_SCOPE("LayerStack OnUpdate");
+					for (Layer* layer : m_LayerStack)
+						layer->OnUpdate(timestep);
+				}
 
-			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
-			m_ImGuiLayer->End();
+				m_ImGuiLayer->Begin();
+				{
+					SKY_PROFILE_SCOPE("LayerStack OnImGuiRenderer");
+					for (Layer* layer : m_LayerStack)
+						layer->OnImGuiRender();
+				}
+				
+				m_ImGuiLayer->End();
+			}
 
 			m_Window->OnUpdate();
 		}
@@ -85,8 +99,9 @@ namespace Sky {
 		return true;
 	}
 
-	bool Application::OnWindowRedsize(WindowResizeEvent& e)
+	bool Application::OnWindowResized(WindowResizeEvent& e)
 	{
+		SKY_PROFILE_FUNCTION();
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

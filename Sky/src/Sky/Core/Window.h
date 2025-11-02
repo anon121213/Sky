@@ -13,10 +13,10 @@ namespace Sky {
 		unsigned int Width;
 		unsigned int Height;
 
-		WindowProps(const std::string& title = "Sky Engine",
-			unsigned int width = 1280,
-			unsigned int height = 720)
-			: Title(title), Width(width), Height(height) 
+		explicit WindowProps(std::string title = "Sky Engine",
+		                     const unsigned int width = 1280,
+		                     const unsigned int height = 720)
+			: Title(std::move(title)), Width(width), Height(height) 
 		{
 		}
 	};
@@ -25,7 +25,7 @@ namespace Sky {
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 
-		virtual ~Window() {}
+		virtual ~Window() = default;
 
 		virtual void OnUpdate() = 0;
 
@@ -38,7 +38,7 @@ namespace Sky {
 
 		virtual void* GetNativeWindow() const = 0;
 
-		static Window* Create(const WindowProps& props = WindowProps());
+		static Scope<Window> Create(const WindowProps& props = WindowProps());
 	};
 
 }

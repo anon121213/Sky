@@ -18,6 +18,7 @@ namespace Sky {
 	
 	void ImGuiLayer::OnAttach() 
 	{
+		SKY_PROFILE_FUNCTION();
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void) io;
@@ -50,18 +51,23 @@ namespace Sky {
 
 	void ImGuiLayer::OnDetach() 
 	{
+		SKY_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::Begin() {
+	void ImGuiLayer::Begin()
+	{
+		SKY_PROFILE_FUNCTION();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
 
-	void ImGuiLayer::End() {
+	void ImGuiLayer::End()
+	{
+		SKY_PROFILE_FUNCTION();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2(static_cast<float>(app.GetWindow().GetWidth()), static_cast<float>(app.GetWindow().GetHeight()));
@@ -76,10 +82,6 @@ namespace Sky {
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-	}
-
-	void ImGuiLayer::OnImGuiRender() 
-	{
 	}
 
 }

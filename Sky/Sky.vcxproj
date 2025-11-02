@@ -165,6 +165,7 @@
     <ClInclude Include="src\Sky\Core\MouseButtonCodes.h" />
     <ClInclude Include="src\Sky\Core\Timestep.h" />
     <ClInclude Include="src\Sky\Core\Window.h" />
+    <ClInclude Include="src\Sky\Debug\Instrumentor.h" />
     <ClInclude Include="src\Sky\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Sky\Events\Event.h" />
     <ClInclude Include="src\Sky\Events\KeyEvent.h" />
