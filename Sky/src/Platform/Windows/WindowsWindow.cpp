@@ -25,7 +25,7 @@ namespace Sky {
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		SKY_PROFILE_FUNCTION();
-		Init(props);
+		WindowsWindow::Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()

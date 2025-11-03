@@ -127,8 +127,8 @@ namespace Sky
 #if SKY_PROFILE
 	#define SKY_PROFILE_BEGIN_SESSION(name, filepath) ::Sky::Instrumentor::Get().BeginSession(name, filepath)
 	#define SKY_PROFILE_END_SESSION() ::Sky::Instrumentor::Get().EndSession()
-	#define SKY_PROFILE_SCOPE(name) ::Sky::InstrumentationTimer timer##__LINE__(name);
-	#define SKY_PROFILE_FUNCTION() SKY_PROFILE_SCOPE(__FUNCSIG__);
+	#define SKY_PROFILE_SCOPE(name) ::Sky::InstrumentationTimer timer##__LINE__(name)
+	#define SKY_PROFILE_FUNCTION() SKY_PROFILE_SCOPE(__FUNCSIG__)
 #else
 	#define SKY_PROFILE_BEGIN_SESSION(name, filepath);
 	#define SKY_PROFILE_END_SESSION();

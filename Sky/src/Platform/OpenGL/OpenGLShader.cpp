@@ -18,18 +18,18 @@ namespace Sky {
 		return 0;
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& filepath)
+	OpenGLShader::OpenGLShader(const std::string& filePath)
 	{
 		SKY_PROFILE_FUNCTION();
-		const std::string source = ReadFile(filepath);
+		const std::string source = ReadFile(filePath);
 		const auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
 
-		auto lastSlash = filepath.find_last_of("/\\");
+		auto lastSlash = filePath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		const auto lastDot = filepath.rfind('.');
-		const auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-		m_Name = filepath.substr(lastSlash, count);
+		const auto lastDot = filePath.rfind('.');
+		const auto count = lastDot == std::string::npos ? filePath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filePath.substr(lastSlash, count);
 	}
 
 	OpenGLShader::OpenGLShader(std::string name, const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -203,6 +203,12 @@ namespace Sky {
 	{
 		SKY_PROFILE_FUNCTION();
 		UploadUniformInt(name, value);
+	}
+
+	void OpenGLShader::SetFloat(const std::string& name, const float value)
+	{
+		SKY_PROFILE_FUNCTION();
+		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
