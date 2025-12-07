@@ -7,3 +7,6 @@ bin-int/
 
 #files
 *.user
+Sandbox/SkyProfile-Runtime.json
+Sandbox/SkyProfile-Shutdown.json
+Sandbox/SkyProfile-Startup.json
