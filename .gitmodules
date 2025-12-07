@@ -3,10 +3,10 @@
 	url = https://github.com/gabime/spdlog
 [submodule "Sky/vendor/GLFW"]
 	path = Sky/vendor/GLFW
-	url = https://github.com/TheCherno/GLFW
+	url = https://github.com/anon121213/glfw
 [submodule "Sky/vendor/imgui"]
 	path = Sky/vendor/imgui
-	url = https://github.com/TheCherno/imgui
+	url = https://github.com/anon121213/imgui
 [submodule "Sky/vendor/glm"]
 	path = Sky/vendor/glm
 	url = https://github.com/g-truc/glm
