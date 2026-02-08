@@ -1,6 +1,8 @@
 #include "skypch.h"
 #include "Renderer.h"
 
+#include <memory>
+
 #include "Renderer2D.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -33,7 +35,7 @@ namespace Sky {
 
 	void Renderer::EndScene() 
 	{
-
+		
 	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)

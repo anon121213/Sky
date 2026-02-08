@@ -5,26 +5,41 @@
 
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
-namespace Sky {
-
-	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+namespace Sky
+{
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:     SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!"); return nullptr;
-			case RendererAPI::API::OpenGL:   return CreateRef<OpenGLVertexBuffer>(vertices, size);
+		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");
+			return nullptr;
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLVertexBuffer>(size);
 		}
 
 		SKY_CORE_ASSERT(false, "Unknown RenderAPI!");
 		return nullptr;
 	}
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::API::None:     SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!"); return nullptr;
-			case RendererAPI::API::OpenGL:   return CreateRef<OpenGLIndexBuffer>(indices, size);
+		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");
+			return nullptr;
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLVertexBuffer>(vertices, size);
+		}
+
+		SKY_CORE_ASSERT(false, "Unknown RenderAPI!");
+		return nullptr;
+	}
+
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");
+			return nullptr;
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 
 		SKY_CORE_ASSERT(false, "Unknown RenderAPI!");

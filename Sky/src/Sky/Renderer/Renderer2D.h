@@ -1,11 +1,4 @@
 ﻿#pragma once
-#pragma once
-#pragma once
-#pragma once
-#pragma once
-#pragma once
-#pragma once
-#pragma once
 
 #include "OrthographicCamera.h"
 #include "Texture.h"
@@ -20,6 +13,7 @@ namespace Sky
 
 		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
+		static void Flush();
 
 		// Primitives
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
@@ -32,5 +26,4 @@ namespace Sky
 		static void DrawRotatedQuad(const glm::vec2& position, float rotation, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
 		static void DrawRotatedQuad(const glm::vec3& position, float rotation, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const glm::vec4& tintColor = glm::vec4(1.0f));
 	};
-
 }
