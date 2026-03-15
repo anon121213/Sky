@@ -5,7 +5,7 @@
 #include "ObjectsContainer.h"
 
 namespace Sky {
-	class GameObjectsContainer : ObjectsContainer
+	class GameObjectsContainer : public ObjectsContainer
 	{
 	public: 
 		void AddObject(Object& go) const override;

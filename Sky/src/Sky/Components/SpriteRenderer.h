@@ -6,7 +6,7 @@
 
 namespace Sky {
 
-	class SpriteRenderer : Component
+	class SpriteRenderer : public Component
 	{
 	public:
 		SpriteRenderer(Ref<Texture2D> texture, Ref<Transform> transrom);

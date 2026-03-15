@@ -5,9 +5,9 @@
 namespace Sky {
 	class Object {
 	public:
-		static const UUID& GetGuid() { return m_Guid; }
+		const UUID& GetGuid() { return m_Guid; }
 
 	private:
-		static UUID m_Guid;
+		UUID m_Guid;
 	};
 }

@@ -1,9 +1,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "Sky/Components/Component.h"
 
 namespace Sky {
-	class Transform : Component
+	class Transform : public Component
 	{
 	public:
 		Transform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);

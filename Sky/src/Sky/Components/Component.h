@@ -6,8 +6,9 @@
 namespace Sky {
 	class Component {
 	public:
-		UUID& GetId() { return m_Id; }
+		virtual ~Component() = default;
 
+		const UUID& GetId() { return m_Id; }
 	private:
 		UUID m_Id;
 	};

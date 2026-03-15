@@ -7,17 +7,20 @@
 #include "Sky/Components/Transform.h"
 
 namespace Sky {
-	class GameObject : Object {
+	class GameObject : public Object {
 	public:
 		GameObject(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
 
 		const Ref<Transform> GetTransform() { return m_Transform; }
 
 		template<typename T>
-		Ref<Component> GetComponenet() {
-			for (auto& kv : component) {
-				if (typedef(component.second) == typedef(T))
-					return component.second;
+		Ref<T> GetComponenet() {
+			SKY_ASSERT(std::is_base_of_v<Component, T>, "T must inherit from Component");
+
+			for (auto& kv : m_Components) {
+				if (auto casted = std::dynamic_pointer_cast<T>(kv.second)) {
+					return casted;
+				}
 			}
 
 			return nullptr;
@@ -38,6 +41,6 @@ namespace Sky {
 
 	private:
 		Ref<Transform> m_Transform;
-		std::unordered_map<UUID&, Ref<Component>> m_Components; // make key to type of component for quicly fined
+		std::unordered_map<UUID, Ref<Component>> m_Components; // make key to type of component for quicly fined
 	};
 }
