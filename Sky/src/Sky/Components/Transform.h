@@ -1,29 +1,16 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "Sky/Components/Component.h"
 
 namespace Sky {
-	class Transform : public Component
-	{
-	public:
-		Transform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale);
+    struct Transform {
+        glm::vec3 Position;
+        glm::vec3 Rotation;
+        glm::vec3 Scale;
 
-		const void SetPosition(const float x, const float y, const float z);
-		const void SetRotation(const float x, const float y, const float z);
-		const void SetScale(const float x, const float y, const float z);
+        Transform(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
+            : Position(position), Rotation(rotation), Scale(scale) {
+        }
+    };
 
-		const void SetPosition(const glm::vec3& position);
-		const void SetRotation(const glm::vec3& rotation);
-		const void SetScale(const glm::vec3& scale);
-
-		const glm::vec3& GetPosition() const { return m_Position; }
-		const glm::vec3& GetRotation() const { return m_Position; }
-		const glm::vec3& GetScale() const { return m_Position; }
-
-	private:
-		glm::vec3 m_Position;
-		glm::vec3 m_Rotation;
-		glm::vec3 m_Scale;
-	};
 }

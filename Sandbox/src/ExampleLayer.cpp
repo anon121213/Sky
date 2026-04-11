@@ -4,6 +4,9 @@
 #include "glm/gtc/type_ptr.hpp"
 #include <Platform/OpenGL/OpenGLShader.h>
 
+#include "Sky/Components/Transform.h"
+#include "Sky/ECS/Registry.h"
+
 ExampleLayer::ExampleLayer()
 	: Layer("Example"), m_CameraController(1280.0f / 720.f)
 {
@@ -179,7 +182,6 @@ void ExampleLayer::OnImGuiRender()
 
 	ImGui::End();
 }
-
 
 void ExampleLayer::OnEvent(Sky::Event& event)
 {

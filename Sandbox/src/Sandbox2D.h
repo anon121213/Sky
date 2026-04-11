@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sky.h"
+#include "Sky/ECS/World.h"
 
 class Sandbox2D : public Sky::Layer {
 public:
@@ -17,10 +18,9 @@ public:
 private:
 	Sky::OrthographicCameraController m_CameraController;
 
-	// Temp
-	Sky::Ref<Sky::VertexArray> m_SquareVA;
-	Sky::Ref<Sky::Shader> m_FlatColorShader;
+	Sky::Ref<Sky::World> m_World;
 
+	// Temp
 	Sky::Ref<Sky::Texture2D> m_CheckerboardTexture;
 
 	glm::vec4 m_RedSquareColor = { 0.8f, 0.2f, 0.3f, 1.0f };

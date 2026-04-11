@@ -4,7 +4,7 @@
 
 class ExampleLayer : public Sky::Layer {
 public:
-	ExampleLayer();	
+	ExampleLayer();
 	~ExampleLayer() override = default;
 
 	void OnUpdate(Sky::Timestep ts) override;

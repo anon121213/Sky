@@ -2,26 +2,38 @@
 #include "imgui/imgui.h"
 
 #include "glm/gtc/type_ptr.hpp"
+#include "Sky/Components/Transform.h"
+#include "TestSystem.h"
 
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.f)
 {
+	m_World = Sky::CreateRef<Sky::World>();
+
+	m_World->AddSystem<TestSystem>();
+
+	m_World->OnAwake();
 }
 
 void Sandbox2D::OnAttach()
 {
 	SKY_PROFILE_FUNCTION();
+	m_World->OnStart();
+
 	m_CheckerboardTexture = Sky::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
 {
 	SKY_PROFILE_FUNCTION();
+	m_World->OnStop();
 }
 
 void Sandbox2D::OnUpdate(Sky::Timestep ts)
 {
 	SKY_PROFILE_FUNCTION();
+	m_World->OnUpdate(ts);
+
 	//  Update
 	m_CameraController.OnUpdate(ts);
 
