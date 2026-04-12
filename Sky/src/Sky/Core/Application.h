@@ -26,6 +26,8 @@ namespace Sky {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
+		void Close();
+
 		static Application& Get() { return *s_Instance; }
 		Window& GetWindow() const { return *m_Window; }
 	private:

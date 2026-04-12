@@ -46,6 +46,11 @@ namespace Sky {
 		layer->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		SKY_PROFILE_FUNCTION();

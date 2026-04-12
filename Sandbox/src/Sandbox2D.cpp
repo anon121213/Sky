@@ -64,17 +64,64 @@ void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 void Sandbox2D::OnImGuiRender()
 {
 	SKY_PROFILE_FUNCTION();
-	ImGui::Begin("Settings");
 
-	const auto stats = Sky::Renderer2D::GetStats();
-	ImGui::Text("Renderer2D Stats:");
-	ImGui::Text("Draw Cells: %u", stats.DrawCalls);
-	ImGui::Text("Quads: %u", stats.QuadCount);
-	ImGui::Text("Vertices: %u", stats.GetTotalVertexCount());
-	ImGui::Text("Indices: %u", stats.GetTotalIndexCount());
+	static bool dockSpaceOpen = true;
+    static bool opt_fullscreen = true;
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-	ImGui::ColorEdit4("Red Square Color", glm::value_ptr(m_RedSquareColor));
-	ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BlueSquareColor));
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    if (opt_fullscreen)
+    {
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    }
+
+    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+        window_flags |= ImGuiWindowFlags_NoBackground;
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("DockSpace Demo", &dockSpaceOpen, window_flags);
+    ImGui::PopStyleVar();
+
+    if (opt_fullscreen)
+        ImGui::PopStyleVar(2);
+
+    ImGuiIO& io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+    {
+        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    }
+
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+			if (ImGui::MenuItem("Exit")) Sky::Application::Get().Close();    
+            ImGui::EndMenu();
+        }
+        
+        ImGui::EndMenuBar();
+    }
+
+    ImGui::Begin("Settings");
+
+    const auto stats = Sky::Renderer2D::GetStats();
+    ImGui::Text("Renderer2D Stats:");
+    ImGui::Text("Draw Cells: %u", stats.DrawCalls);
+    ImGui::Text("Quads: %u", stats.QuadCount);
+    ImGui::Text("Vertices: %u", stats.GetTotalVertexCount());
+    ImGui::Text("Indices: %u", stats.GetTotalIndexCount());
+
+    ImGui::ColorEdit4("Red Square Color", glm::value_ptr(m_RedSquareColor));
+    ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BlueSquareColor));
+    ImGui::End();
 
 	ImGui::End();
 }
