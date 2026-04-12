@@ -37,19 +37,26 @@ void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 
 	{
 		static float rotation = 0.0f;
-		rotation += ts * 20.0f;
+		rotation += ts * 40.0f;
 
 		SKY_PROFILE_SCOPE("Renderer Draw");
 		Sky::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Sky::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, 45.0f, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-		Sky::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { m_RedSquareColor });
-		Sky::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { m_BlueSquareColor });
-		Sky::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerboardTexture, 10.0f);
-		Sky::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, rotation, { 1.0f, 1.0f },  m_CheckerboardTexture, 20.0f);
-		Sky::Renderer2D::EndScene();
 
-		Sky::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Sky::Renderer2D::DrawQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, m_TextureInSheet);
+		// Background
+		Sky::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 6.0f }, m_CheckerboardTexture, 5.0f);
+
+		// Top row: colored quads
+		Sky::Renderer2D::DrawQuad({ -1.2f,  0.5f }, { 0.7f, 0.7f }, m_RedSquareColor);
+		Sky::Renderer2D::DrawQuad({  1.2f,  0.5f }, { 0.7f, 0.7f }, m_BlueSquareColor);
+
+		// Center: rotating textured quad
+		Sky::Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, rotation, { 0.9f, 0.9f }, m_CheckerboardTexture, 3.0f);
+
+		// Bottom row: rotated colored / sprite tile / tinted texture
+		Sky::Renderer2D::DrawRotatedQuad({ -1.2f, -0.6f }, 45.0f, { 0.6f, 0.6f }, { 0.2f, 0.8f, 0.3f, 1.0f });
+		Sky::Renderer2D::DrawQuad(        {  0.0f, -0.6f },        { 0.7f, 0.7f }, m_TextureInSheet);
+		Sky::Renderer2D::DrawQuad(        {  1.2f, -0.6f },        { 0.7f, 0.7f }, m_CheckerboardTexture, 2.0f, { 1.0f, 0.75f, 0.2f, 1.0f });
+
 		Sky::Renderer2D::EndScene();
 	}
 }

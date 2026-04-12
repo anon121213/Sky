@@ -2,6 +2,8 @@
 
 // For use by Sky applications
 
+#include "Sky/Core/Core.h"
+
 #include "Sky/Core/Application.h"
 #include "Sky/Core/Layer.h"
 #include "Sky/Core/Log.h"
@@ -25,6 +27,7 @@
 #include "Sky/Renderer/Buffer.h"
 #include "Sky/Renderer/Shader.h"
 #include "Sky/Renderer/Texture.h"
+#include "Sky/Renderer/SubTexture2D.h"
 #include "Sky/Renderer/VertexArray.h"
 
 #include "Sky/Renderer/OrthographicCamera.h"
