@@ -14,6 +14,11 @@ void Sandbox2D::OnAttach()
 	m_CheckerboardTexture = Sky::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_SpriteSheet = Sky::Texture2D::Create("assets/game/textures/TX Tileset Ground.png");
 	m_TextureInSheet = Sky::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 128, 128 });
+
+	Sky::FrameBufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_FrameBuffer = Sky::FrameBuffer::Create(fbSpec);
 }
 
 void Sandbox2D::OnDetach()
@@ -31,6 +36,7 @@ void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 	Sky::Renderer2D::ResetStats();
 	{
 		SKY_PROFILE_SCOPE("Renderer Prep");
+		m_FrameBuffer->Bind();
 		Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Sky::RenderCommand::Clear();
 	}
@@ -58,6 +64,7 @@ void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 		Sky::Renderer2D::DrawQuad(        {  1.2f, -0.6f },        { 0.7f, 0.7f }, m_CheckerboardTexture, 2.0f, { 1.0f, 0.75f, 0.2f, 1.0f });
 
 		Sky::Renderer2D::EndScene();
+		m_FrameBuffer->Unbind();
 	}
 }
 
@@ -65,50 +72,55 @@ void Sandbox2D::OnImGuiRender()
 {
 	SKY_PROFILE_FUNCTION();
 
-	static bool dockSpaceOpen = true;
-    static bool opt_fullscreen = true;
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+	static bool dockingEnabled = true;
 
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-    if (opt_fullscreen)
-    {
-        const ImGuiViewport* viewport = ImGui::GetMainViewport();
-        ImGui::SetNextWindowPos(viewport->WorkPos);
-        ImGui::SetNextWindowSize(viewport->WorkSize);
-        ImGui::SetNextWindowViewport(viewport->ID);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-        window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-        window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-    }
+	if (dockingEnabled)
+	{
+		static bool dockSpaceOpen = true;
+		static bool opt_fullscreen = true;
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-        window_flags |= ImGuiWindowFlags_NoBackground;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		if (opt_fullscreen)
+		{
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->WorkPos);
+			ImGui::SetNextWindowSize(viewport->WorkSize);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		}
 
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    ImGui::Begin("DockSpace Demo", &dockSpaceOpen, window_flags);
-    ImGui::PopStyleVar();
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
 
-    if (opt_fullscreen)
-        ImGui::PopStyleVar(2);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("DockSpace Demo", &dockSpaceOpen, window_flags);
+		ImGui::PopStyleVar();
 
-    ImGuiIO& io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-    {
-        ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-    }
+		if (opt_fullscreen)
+			ImGui::PopStyleVar(2);
 
-    if (ImGui::BeginMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-			if (ImGui::MenuItem("Exit")) Sky::Application::Get().Close();    
-            ImGui::EndMenu();
-        }
-        
-        ImGui::EndMenuBar();
-    }
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Exit")) Sky::Application::Get().Close();
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenuBar();
+		}
+	}
 
     ImGui::Begin("Settings");
 
@@ -121,9 +133,13 @@ void Sandbox2D::OnImGuiRender()
 
     ImGui::ColorEdit4("Red Square Color", glm::value_ptr(m_RedSquareColor));
     ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BlueSquareColor));
+
+	uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+	ImGui::Image((void*)textureID, ImVec2(1280.0f, 720.0f), ImVec2(0, 1), ImVec2(1, 0));
     ImGui::End();
 
-	ImGui::End();
+	if (dockingEnabled)
+		ImGui::End();
 }
 
 void Sandbox2D::OnEvent(Sky::Event& event)

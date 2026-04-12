@@ -11,8 +11,7 @@ namespace Sky
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");
-			return nullptr;
+		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");return nullptr;
 		case RendererAPI::API::OpenGL: return CreateRef<OpenGLVertexBuffer>(size);
 		}
 
@@ -24,8 +23,7 @@ namespace Sky
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");
-			return nullptr;
+		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!") return nullptr;
 		case RendererAPI::API::OpenGL: return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
@@ -37,8 +35,7 @@ namespace Sky
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");
-			return nullptr;
+		case RendererAPI::API::None: SKY_CORE_ASSERT(false, "REndererAPI::None is currently not supported!");return nullptr;
 		case RendererAPI::API::OpenGL: return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 

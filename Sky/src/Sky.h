@@ -26,6 +26,7 @@
 
 #include "Sky/Renderer/Buffer.h"
 #include "Sky/Renderer/Shader.h"
+#include "Sky/Renderer/FrameBuffer.h"
 #include "Sky/Renderer/Texture.h"
 #include "Sky/Renderer/SubTexture2D.h"
 #include "Sky/Renderer/VertexArray.h"
