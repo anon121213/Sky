@@ -13,6 +13,7 @@ void Sandbox2D::OnAttach()
 	SKY_PROFILE_FUNCTION();
 	m_CheckerboardTexture = Sky::Texture2D::Create("assets/textures/Checkerboard.png");
 	m_SpriteSheet = Sky::Texture2D::Create("assets/game/textures/TX Tileset Ground.png");
+	m_TextureInSheet = Sky::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 128, 128 });
 }
 
 void Sandbox2D::OnDetach()
@@ -20,7 +21,7 @@ void Sandbox2D::OnDetach()
 	SKY_PROFILE_FUNCTION();
 }
 
-void Sandbox2D::OnUpdate(Sky::Timestep ts)
+void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 {
 	SKY_PROFILE_FUNCTION();
 	//  Update
@@ -42,13 +43,13 @@ void Sandbox2D::OnUpdate(Sky::Timestep ts)
 		Sky::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		Sky::Renderer2D::DrawRotatedQuad({ 1.0f, 0.0f }, 45.0f, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Sky::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { m_RedSquareColor });
-		Sky::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { m_BuleSquareColor });
+		Sky::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { m_BlueSquareColor });
 		Sky::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerboardTexture, 10.0f);
 		Sky::Renderer2D::DrawRotatedQuad({ -2.0f, 0.0f, 0.0f }, rotation, { 1.0f, 1.0f },  m_CheckerboardTexture, 20.0f);
 		Sky::Renderer2D::EndScene();
 
 		Sky::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		Sky::Renderer2D::DrawQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, m_SpriteSheet);
+		Sky::Renderer2D::DrawQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, m_TextureInSheet);
 		Sky::Renderer2D::EndScene();
 	}
 }
@@ -66,7 +67,7 @@ void Sandbox2D::OnImGuiRender()
 	ImGui::Text("Indices: %u", stats.GetTotalIndexCount());
 
 	ImGui::ColorEdit4("Red Square Color", glm::value_ptr(m_RedSquareColor));
-	ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BuleSquareColor));
+	ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BlueSquareColor));
 
 	ImGui::End();
 }
