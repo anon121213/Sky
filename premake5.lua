@@ -20,6 +20,7 @@ IncludeDir["Glad"] = "Sky/vendor/Glad/include"
 IncludeDir["ImGui"] = "Sky/vendor/imgui"
 IncludeDir["glm"] = "Sky/vendor/glm"
 IncludeDir["stb_image"] = "Sky/vendor/stb_image"
+IncludeDir["entt"] = "Sky/vendor/entt/include"
 
 group "Dependencies"
 	include "Sky/vendor/GLFW"
@@ -60,7 +61,8 @@ project "Sky"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links {
@@ -119,6 +121,7 @@ project "Sandbox"
 		"Sky/src",
 		"Sky/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}",
 	}
 
 	links {
@@ -169,6 +172,7 @@ project "Sky-Editor"
 		"Sky/src",
 		"Sky/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}",
 	}
 
 	links {
