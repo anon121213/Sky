@@ -11,11 +11,11 @@ int main(int argc, char** argv) {
 	const auto app = Sky::CreateApplication();
 	SKY_PROFILE_END_SESSION();
 
-	SKY_PROFILE_BEGIN_SESSION("Startup", "SkyProfile-Runtime.json");
+	SKY_PROFILE_BEGIN_SESSION("Runtime", "SkyProfile-Runtime.json");
 	app->Run();
 	SKY_PROFILE_END_SESSION();
 
-	SKY_PROFILE_BEGIN_SESSION("Startup", "SkyProfile-Shutdown.json");
+	SKY_PROFILE_BEGIN_SESSION("Shutdown", "SkyProfile-Shutdown.json");
 	delete app;
 	SKY_PROFILE_END_SESSION();
 }

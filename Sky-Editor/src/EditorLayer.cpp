@@ -15,7 +15,7 @@ namespace Sky
 		SKY_PROFILE_FUNCTION();
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_SpriteSheet = Texture2D::Create("assets/game/textures/TX Tileset Ground.png");
-		m_TextureInSheet = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7, 6 }, { 128, 128 });
+		m_TextureInSheet = SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
 
 		FrameBufferSpecification fbSpec;
 		fbSpec.Width = 1280;
@@ -39,7 +39,7 @@ namespace Sky
 		{
 			SKY_PROFILE_SCOPE("Renderer Prep");
 			m_FrameBuffer->Bind();
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+			RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
 			RenderCommand::Clear();
 		}
 
@@ -51,19 +51,19 @@ namespace Sky
 			Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 			// Background
-			Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 6.0f }, m_CheckerboardTexture, 5.0f);
+			Renderer2D::DrawQuad({0.0f, 0.0f, -0.1f}, {10.0f, 6.0f}, m_CheckerboardTexture, 5.0f);
 
 			// Top row: colored quads
-			Renderer2D::DrawQuad({ -1.2f,  0.5f }, { 0.7f, 0.7f }, m_RedSquareColor);
-			Renderer2D::DrawQuad({ 1.2f,  0.5f }, { 0.7f, 0.7f }, m_BlueSquareColor);
+			Renderer2D::DrawQuad({-1.2f, 0.5f}, {0.7f, 0.7f}, m_RedSquareColor);
+			Renderer2D::DrawQuad({1.2f, 0.5f}, {0.7f, 0.7f}, m_BlueSquareColor);
 
 			// Center: rotating textured quad
-			Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f }, rotation, { 0.9f, 0.9f }, m_CheckerboardTexture, 3.0f);
+			Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, rotation, {0.9f, 0.9f}, m_CheckerboardTexture, 3.0f);
 
 			// Bottom row: rotated colored / sprite tile / tinted texture
-			Renderer2D::DrawRotatedQuad({ -1.2f, -0.6f }, 45.0f, { 0.6f, 0.6f }, { 0.2f, 0.8f, 0.3f, 1.0f });
-			Renderer2D::DrawQuad({ 0.0f, -0.6f }, { 0.7f, 0.7f }, m_TextureInSheet);
-			Renderer2D::DrawQuad({ 1.2f, -0.6f }, { 0.7f, 0.7f }, m_CheckerboardTexture, 2.0f, { 1.0f, 0.75f, 0.2f, 1.0f });
+			Renderer2D::DrawRotatedQuad({-1.2f, -0.6f}, 45.0f, {0.6f, 0.6f}, {0.2f, 0.8f, 0.3f, 1.0f});
+			Renderer2D::DrawQuad({0.0f, -0.6f}, {0.7f, 0.7f}, m_TextureInSheet);
+			Renderer2D::DrawQuad({1.2f, -0.6f}, {0.7f, 0.7f}, m_CheckerboardTexture, 2.0f, {1.0f, 0.75f, 0.2f, 1.0f});
 
 			Renderer2D::EndScene();
 			m_FrameBuffer->Unbind();
@@ -74,54 +74,50 @@ namespace Sky
 	{
 		SKY_PROFILE_FUNCTION();
 
-		static bool dockingEnabled = true;
+		static bool dockSpaceOpen = true;
+		static bool opt_fullscreen = true;
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-		if (dockingEnabled)
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		if (opt_fullscreen)
 		{
-			static bool dockSpaceOpen = true;
-			static bool opt_fullscreen = true;
-			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->WorkPos);
+			ImGui::SetNextWindowSize(viewport->WorkSize);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+				ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		}
 
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-			if (opt_fullscreen)
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("DockSpace Demo", &dockSpaceOpen, window_flags);
+		ImGui::PopStyleVar();
+
+		if (opt_fullscreen)
+			ImGui::PopStyleVar(2);
+
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
 			{
-				const ImGuiViewport* viewport = ImGui::GetMainViewport();
-				ImGui::SetNextWindowPos(viewport->WorkPos);
-				ImGui::SetNextWindowSize(viewport->WorkSize);
-				ImGui::SetNextWindowViewport(viewport->ID);
-				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-				window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-				window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+				if (ImGui::MenuItem("Exit")) Application::Get().Close();
+				ImGui::EndMenu();
 			}
 
-			if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-				window_flags |= ImGuiWindowFlags_NoBackground;
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			ImGui::Begin("DockSpace Demo", &dockSpaceOpen, window_flags);
-			ImGui::PopStyleVar();
-
-			if (opt_fullscreen)
-				ImGui::PopStyleVar(2);
-
-			ImGuiIO& io = ImGui::GetIO();
-			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-			{
-				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-			}
-
-			if (ImGui::BeginMenuBar())
-			{
-				if (ImGui::BeginMenu("File"))
-				{
-					if (ImGui::MenuItem("Exit")) Application::Get().Close();
-					ImGui::EndMenu();
-				}
-
-				ImGui::EndMenuBar();
-			}
+			ImGui::EndMenuBar();
 		}
 
 		ImGui::Begin("Settings");
@@ -135,18 +131,27 @@ namespace Sky
 
 		ImGui::ColorEdit4("Red Square Color", glm::value_ptr(m_RedSquareColor));
 		ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BlueSquareColor));
-
-		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2(1280.0f, 720.0f), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 
-		if (dockingEnabled)
-			ImGui::End();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("Viewport");
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
+		{
+			m_ViewportSize = {viewportSize.x, viewportSize.y};
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		}
+		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::End();
+		ImGui::PopStyleVar();
+
+		ImGui::End();
 	}
 
 	void EditorLayer::OnEvent(Event& event)
 	{
 		m_CameraController.OnEvent(event);
 	}
-
 }

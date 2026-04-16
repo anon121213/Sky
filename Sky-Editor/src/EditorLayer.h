@@ -30,6 +30,8 @@ namespace Sky
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
+		glm::vec2 m_ViewportSize;
+
 		glm::vec4 m_RedSquareColor = { 0.8f, 0.2f, 0.3f, 1.0f };
 		glm::vec4 m_BlueSquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 	};
