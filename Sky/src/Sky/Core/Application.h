@@ -28,8 +28,10 @@ namespace Sky {
 
 		void Close();
 
-		static Application& Get() { return *s_Instance; }
+		ImGuiLayer* GetImGuiLayer() const { return m_ImGuiLayer; }
 		Window& GetWindow() const { return *m_Window; }
+
+		static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
