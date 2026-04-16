@@ -10,11 +10,14 @@
 
 namespace Sky
 {
-
 	class Registry
 	{
 	public:
-		Registry() = default;
+		Registry()
+		{
+			m_Pools.reserve(64);
+		};
+
 		Registry(const Registry&) = delete;
 		Registry& operator=(const Registry&) = delete;
 
@@ -44,9 +47,11 @@ namespace Sky
 		bool Has(Entity entity) {
 			SKY_ASSERT(IsValid(entity), "Entity is invalid");
 			const ComponentTypeId id = GetComponentTypeId<T>();
-			const auto it = m_Pools.find(id);
-			if (it == m_Pools.end()) return false;
-			return static_cast<ComponentPool<T>*>(it->second)->Has(entity);
+			
+			if (id >= m_Pools.size() || m_Pools[id] == nullptr)
+				return false;
+
+			return m_Pools[id]->Has(entity);
 		}
 
 		template<typename T>
@@ -92,13 +97,18 @@ namespace Sky
 
 		template<typename... Components, typename Func>
 		void View(Func callback) {
-			if (!(... && m_Pools.count(GetComponentTypeId<Components>())))
+			if (!(... && (GetComponentTypeId<Components>() < m_Pools.size() &&
+				m_Pools[GetComponentTypeId<Components>()] != nullptr)))
 				return;
+
+			std::array<IComponentPool*, sizeof...(Components)> pools = {
+				GetPool<Components>()...
+			};
 
 			IComponentPool* smallest = nullptr;
 			size_t minSize = SIZE_MAX;
 
-			for (auto pool : { static_cast<IComponentPool*>(GetPool<Components>())... }) {
+			for (auto pool : pools) {
 				if (pool->Size() < minSize) {
 					minSize = pool->Size();
 					smallest = pool;
@@ -108,8 +118,11 @@ namespace Sky
 			if (!smallest || minSize == 0) return;
 
 			for (Entity e : smallest->GetDenseIds()) {
-				if (!(Has<Components>(e) && ...))
-					continue;
+				bool hasAll = true;
+				for (auto pool : pools) {
+					if (!pool->Has(e)) { hasAll = false; break; }
+				}
+				if (!hasAll) continue;
 
 				callback(e, Get<Components>(e)...);
 			}
@@ -122,7 +135,7 @@ namespace Sky
 		}
 
 		~Registry() {
-			for (auto& [id, pool] : m_Pools)
+			for (auto pool : m_Pools)
 				delete pool;
 
 			for (const auto group : m_Groups)
@@ -134,15 +147,20 @@ namespace Sky
 		ComponentPool<T>* GetPool() {
 			const ComponentTypeId id = GetComponentTypeId<T>();
 
-			if (const auto it = m_Pools.find(id); it != m_Pools.end())
-				return static_cast<ComponentPool<T>*>(it->second);
+			if (id >= m_Pools.size())
+				m_Pools.resize(id + 1);
 
-			ComponentPool<T>* pool = new ComponentPool<T>();
-			m_Pools[id] = pool;
-			return pool;
+			if (m_Pools[id] == nullptr)
+			{
+				ComponentPool<T>* pool = new ComponentPool<T>();
+				m_Pools[id] = pool;
+				return pool;
+			}
+
+			return static_cast<ComponentPool<T>*>(m_Pools[id]);
 		}
 
-		std::unordered_map<ComponentTypeId, IComponentPool*> m_Pools;
+		std::vector<IComponentPool*> m_Pools;
 		std::vector<Entity> m_FreeList;  
 		std::vector<uint32_t> m_Generations;
 		std::vector<IGroup*> m_Groups;

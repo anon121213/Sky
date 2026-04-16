@@ -22,8 +22,8 @@ namespace Sky
 
 		const uint32_t id = GetEntityIndex(entity);
 
-		for (auto& [typeId, pool] : m_Pools) {
-			if (pool->Has(entity))
+		for (auto& pool : m_Pools) {
+			if (pool && pool->Has(entity))
 				pool->Remove(entity);
 		}
 
