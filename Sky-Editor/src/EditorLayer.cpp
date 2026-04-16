@@ -142,7 +142,7 @@ namespace Sky
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (m_ViewportSize != *(glm::vec2*)&viewportSize)
+		if (m_ViewportSize != *(glm::vec2*)&viewportSize && viewportSize.x > 0 && viewportSize.y > 0)
 		{
 			m_ViewportSize = {viewportSize.x, viewportSize.y};
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);

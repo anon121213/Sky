@@ -6,7 +6,7 @@
 
 namespace Sky {
 
-	class SKY_API Log
+	class Log
 	{
 	public:
 		static void Init();

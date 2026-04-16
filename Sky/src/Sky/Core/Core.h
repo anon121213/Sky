@@ -2,19 +2,9 @@
 
 #include <memory>
 
-#ifdef SKY_PLATFORM_WINDOWS 
-#if SKY_DYNAMIC_LINK
-	#ifdef SKY_BUILD_DLL
-		#define SKY_API __declspec(dllexport)
-	#else
-		#define SKY_API __declspec(dllimport)
-	#endif
-#else
-	#define SKY_API	
-#endif 
-#else
-	#error Sky only support Windows!
-#endif 
+#ifndef SKY_PLATFORM_WINDOWS
+	#error Sky only supports Windows!
+#endif
 
 #ifdef SKY_ENABLE_ASSERTS
 	#define SKY_ASSERT(x, ...) { if(!(x)) { SKY_ERROR("Assertion Failed: {0}", __VA__ARGS__); __debugbreake(); } }

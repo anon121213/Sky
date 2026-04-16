@@ -21,7 +21,7 @@ namespace Sky {
 		}
 	};
 
-	class SKY_API Window {
+	class Window {
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 

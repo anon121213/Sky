@@ -7,7 +7,7 @@
 
 namespace Sky {
 
-	class SKY_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();

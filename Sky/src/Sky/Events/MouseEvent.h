@@ -4,7 +4,7 @@
 
 namespace Sky {
 
-	class SKY_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y)
@@ -26,7 +26,7 @@ namespace Sky {
 		float m_MouseX, m_MouseY;
 	};
 
-	class SKY_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)

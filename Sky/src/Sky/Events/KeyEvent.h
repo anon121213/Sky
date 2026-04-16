@@ -4,7 +4,7 @@
 
 namespace Sky {
 
-	class SKY_API KeyEvent : public Event
+	class KeyEvent : public Event
 	{
 	public:
 		inline int GetKeyCode() const { return m_KeyCode; }
@@ -18,7 +18,7 @@ namespace Sky {
 		int m_KeyCode;
 	};
 
-	class SKY_API KeyPressedEvent : public KeyEvent
+	class KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount)
@@ -37,7 +37,7 @@ namespace Sky {
 		int m_RepeatCount;
 	};
 
-	class SKY_API KeyReleasedEvent : public KeyEvent
+	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(int keycode) 
@@ -53,7 +53,7 @@ namespace Sky {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class SKY_API KeyTypedEvent : public KeyEvent
+	class KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(int keycode)

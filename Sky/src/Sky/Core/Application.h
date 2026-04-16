@@ -13,7 +13,7 @@
 
 namespace Sky {
 
-	class SKY_API Application
+	class Application
 	{
 	public:
 		Application(const std::string& name = "Sky App");

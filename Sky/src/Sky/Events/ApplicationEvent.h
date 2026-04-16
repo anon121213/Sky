@@ -4,7 +4,7 @@
 
 namespace Sky {
 
-	class SKY_API WindowResizeEvent : public Event
+	class WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
@@ -34,7 +34,7 @@ namespace Sky {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class SKY_API AppTickEvent : public Event {
+	class AppTickEvent : public Event {
 	public:
 		AppTickEvent() {}
 
@@ -42,7 +42,7 @@ namespace Sky {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class SKY_API AppUpdateEvent : public Event {
+	class AppUpdateEvent : public Event {
 	public:
 		AppUpdateEvent() {}
 
@@ -50,7 +50,7 @@ namespace Sky {
 		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 	};
 
-	class SKY_API AppRenderEvent : public Event {
+	class AppRenderEvent : public Event {
 	public:
 		AppRenderEvent() {}
 

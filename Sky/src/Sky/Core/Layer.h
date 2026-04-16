@@ -6,7 +6,7 @@
 
 namespace Sky {
 
-	class SKY_API Layer
+	class Layer
 	{
 	public:
 		explicit Layer(const std::string& name = "Layer");
