@@ -31,7 +31,6 @@ void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 	Sky::Renderer2D::ResetStats();
 	{
 		SKY_PROFILE_SCOPE("Renderer Prep");
-		m_FrameBuffer->Bind();
 		Sky::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		Sky::RenderCommand::Clear();
 	}
@@ -59,7 +58,6 @@ void Sandbox2D::OnUpdate(const Sky::Timestep ts)
 		Sky::Renderer2D::DrawQuad(        {  1.2f, -0.6f },        { 0.7f, 0.7f }, m_CheckerboardTexture, 2.0f, { 1.0f, 0.75f, 0.2f, 1.0f });
 
 		Sky::Renderer2D::EndScene();
-		m_FrameBuffer->Unbind();
 	}
 }
 
