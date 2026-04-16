@@ -16,7 +16,7 @@ namespace Sky {
 	class SKY_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Sky App");
 		virtual ~Application();
 
 		void Run();

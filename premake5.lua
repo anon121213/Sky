@@ -8,6 +8,10 @@ workspace "Sky"
 		"Dist"
 	}
 
+	flags {
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
@@ -17,9 +21,11 @@ IncludeDir["ImGui"] = "Sky/vendor/imgui"
 IncludeDir["glm"] = "Sky/vendor/glm"
 IncludeDir["stb_image"] = "Sky/vendor/stb_image"
 
-include "Sky/vendor/GLFW"
-include "Sky/vendor/Glad"
-include "Sky/vendor/imgui"
+group "Dependencies"
+	include "Sky/vendor/GLFW"
+	include "Sky/vendor/Glad"
+	include "Sky/vendor/imgui"
+group ""
 
 project "Sky"
 	location "Sky"
@@ -95,6 +101,56 @@ project "Sky"
 
 project "Sandbox"
 	location "Sandbox"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files {
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs {
+		"Sky/vendor/spdlog/include",
+		"Sky/src",
+		"Sky/vendor",
+		"%{IncludeDir.glm}",
+	}
+
+	links {
+		"Sky"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		buildoptions "/utf-8" 
+
+	defines {
+		"SKY_PLATFORM_WINDOWS"
+	}
+
+	filter "configurations:Debug"
+		defines "SKY_DEBUG"
+		runtime "Debug"
+		optimize "on"
+
+	filter "configurations:Release"
+		defines "SKY_RELEASE"
+		buildoptions "/MD"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "SKY_DIST"
+		runtime "Release"
+		optimize "on"
+
+
+project "Sky-Editor"
+	location "Sky-Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
