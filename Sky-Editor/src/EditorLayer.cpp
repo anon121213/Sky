@@ -28,10 +28,10 @@ namespace Sky
 		m_SquareEntity = square;
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
-		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		m_CameraEntity.AddComponent<CameraComponent>();
 		
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Camera");
-		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
 		cc.Primary = false;
 	}
 
@@ -43,28 +43,31 @@ namespace Sky
 	void EditorLayer::OnUpdate(const Timestep ts)
 	{
 		SKY_PROFILE_FUNCTION();
+
+		// Resize
+		if (FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+		{
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
+
 		//  Update
 		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(ts);
 
-		// Update scene
-
 		// Render
 		Renderer2D::ResetStats();
-		{
-			SKY_PROFILE_SCOPE("Renderer Prep");
-			m_FrameBuffer->Bind();
-			RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
-			RenderCommand::Clear();
-		}
+		m_FrameBuffer->Bind();
+		RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+		RenderCommand::Clear();
 
+		m_ActiveScene->OnUpdate(ts);
 
-		{
-			SKY_PROFILE_SCOPE("Renderer Draw");
-			m_ActiveScene->OnUpdate(ts);
-
-			m_FrameBuffer->Unbind();
-		}
+		m_FrameBuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -145,6 +148,13 @@ namespace Sky
 			m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
 		}
 
+		{
+			auto& camera = m_SecondCameraEntity.GetComponent<CameraComponent>().Camera;
+			float orthoSize = camera.GetOrthographicSize();
+			if (ImGui::DragFloat("Second camera ortho size", &orthoSize))
+				camera.SetOrthographicSize(orthoSize);
+		}
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -160,6 +170,7 @@ namespace Sky
 			m_ViewportSize = {viewportSize.x, viewportSize.y};
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
