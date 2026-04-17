@@ -2,6 +2,7 @@
 #include "imgui/imgui.h"
 
 #include "glm/gtc/type_ptr.hpp"
+#include "Sky/Scene/Components.h"
 
 namespace Sky
 {
@@ -13,14 +14,25 @@ namespace Sky
 	void EditorLayer::OnAttach()
 	{
 		SKY_PROFILE_FUNCTION();
-		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
-		m_SpriteSheet = Texture2D::Create("assets/game/textures/TX Tileset Ground.png");
-		m_TextureInSheet = SubTexture2D::CreateFromCoords(m_SpriteSheet, {7, 6}, {128, 128});
-
+		
 		FrameBufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
+
+		m_ActiveScene = CreateRef<Scene>();
+
+		auto square = m_ActiveScene->CreateEntity("Square");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+		m_SquareEntity = square;
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Camera");
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+		cc.Primary = false;
 	}
 
 	void EditorLayer::OnDetach()
@@ -35,6 +47,8 @@ namespace Sky
 		if (m_ViewportFocused)
 			m_CameraController.OnUpdate(ts);
 
+		// Update scene
+
 		// Render
 		Renderer2D::ResetStats();
 		{
@@ -44,29 +58,11 @@ namespace Sky
 			RenderCommand::Clear();
 		}
 
+
 		{
-			static float rotation = 0.0f;
-			rotation += ts * 40.0f;
-
 			SKY_PROFILE_SCOPE("Renderer Draw");
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
+			m_ActiveScene->OnUpdate(ts);
 
-			// Background
-			Renderer2D::DrawQuad({0.0f, 0.0f, -0.1f}, {10.0f, 6.0f}, m_CheckerboardTexture, 5.0f);
-
-			// Top row: colored quads
-			Renderer2D::DrawQuad({-1.2f, 0.5f}, {0.7f, 0.7f}, m_RedSquareColor);
-			Renderer2D::DrawQuad({1.2f, 0.5f}, {0.7f, 0.7f}, m_BlueSquareColor);
-
-			// Center: rotating textured quad
-			Renderer2D::DrawRotatedQuad({0.0f, 0.0f}, rotation, {0.9f, 0.9f}, m_CheckerboardTexture, 3.0f);
-
-			// Bottom row: rotated colored / sprite tile / tinted texture
-			Renderer2D::DrawRotatedQuad({-1.2f, -0.6f}, 45.0f, {0.6f, 0.6f}, {0.2f, 0.8f, 0.3f, 1.0f});
-			Renderer2D::DrawQuad({0.0f, -0.6f}, {0.7f, 0.7f}, m_TextureInSheet);
-			Renderer2D::DrawQuad({1.2f, -0.6f}, {0.7f, 0.7f}, m_CheckerboardTexture, 2.0f, {1.0f, 0.75f, 0.2f, 1.0f});
-
-			Renderer2D::EndScene();
 			m_FrameBuffer->Unbind();
 		}
 	}
@@ -130,8 +126,25 @@ namespace Sky
 		ImGui::Text("Vertices: %u", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %u", stats.GetTotalIndexCount());
 
-		ImGui::ColorEdit4("Red Square Color", glm::value_ptr(m_RedSquareColor));
-		ImGui::ColorEdit4("Blue Square Color", glm::value_ptr(m_BlueSquareColor));
+		if (m_SquareEntity)
+		{
+			ImGui::Separator();
+			const auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+			ImGui::Text("%s", tag.c_str());
+
+			auto& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
+			ImGui::Separator();
+		}
+
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
+
+		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+		{
+			m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
+			m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
+		}
+
 		ImGui::End();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));

@@ -18,6 +18,10 @@
 
 #include "Sky/ImGui/ImGuiLayer.h"
 
+#include "Sky/Scene/Scene.h"
+#include "Sky/Scene/Entity.h"
+#include "Sky/Scene/Components.h"
+
 // Renderer
 
 #include "Sky/Renderer/Renderer.h"
