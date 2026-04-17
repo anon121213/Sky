@@ -20,6 +20,7 @@
 
 #include "Sky/Scene/Scene.h"
 #include "Sky/Scene/Entity.h"
+#include "Sky/Scene/ScriptableEntity.h"
 #include "Sky/Scene/Components.h"
 
 // Renderer

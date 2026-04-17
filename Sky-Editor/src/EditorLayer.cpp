@@ -14,7 +14,7 @@ namespace Sky
 	void EditorLayer::OnAttach()
 	{
 		SKY_PROFILE_FUNCTION();
-		
+
 		FrameBufferSpecification fbSpec;
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
@@ -23,16 +23,48 @@ namespace Sky
 		m_ActiveScene = CreateRef<Scene>();
 
 		auto square = m_ActiveScene->CreateEntity("Square");
-		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
 
 		m_SquareEntity = square;
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
 		m_CameraEntity.AddComponent<CameraComponent>();
-		
+
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Camera");
 		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
 		cc.Primary = false;
+
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			void OnCreate() override
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				transform[3][1] = rand() % 10 - 5.0f;
+			}
+
+			void OnUpdate(Timestep ts) override
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				float speed = 5.0f;
+
+				if (Input::IsKeyPressed(SKY_KEY_W))
+					transform[3][1] += speed * ts;
+				if (Input::IsKeyPressed(SKY_KEY_A))
+					transform[3][0] -= speed * ts;
+				if (Input::IsKeyPressed(SKY_KEY_S))
+					transform[3][1] -= speed * ts;
+				if (Input::IsKeyPressed(SKY_KEY_D))
+					transform[3][0] += speed * ts;
+			}
+
+			void OnDestroy() override
+			{
+			}
+		};
+
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -140,7 +172,8 @@ namespace Sky
 			ImGui::Separator();
 		}
 
-		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
+		ImGui::DragFloat3("Camera Transform",
+		                  glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
 
 		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
 		{
