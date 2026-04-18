@@ -7,7 +7,74 @@
 
 #include "Platform/OpenGL/OpenGLContext.h"
 
+#ifdef SKY_PLATFORM_WINDOWS
+	#define GLFW_EXPOSE_NATIVE_WIN32
+	#include "GLFW/glfw3native.h"
+	#include <dwmapi.h>
+	#pragma comment(lib, "dwmapi.lib")
+
+	#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
+		#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+	#endif
+
+	#ifndef DWMWA_WINDOW_CORNER_PREFERENCE
+		#define DWMWA_WINDOW_CORNER_PREFERENCE 33
+	#endif
+
+	#ifndef DWMWA_BORDER_COLOR
+		#define DWMWA_BORDER_COLOR 34
+	#endif
+
+	#ifndef DWMWA_CAPTION_COLOR
+		#define DWMWA_CAPTION_COLOR 35
+	#endif
+
+	#ifndef DWMWA_TEXT_COLOR
+		#define DWMWA_TEXT_COLOR 36
+	#endif
+
+	#ifndef DWMWA_SYSTEMBACKDROP_TYPE
+		#define DWMWA_SYSTEMBACKDROP_TYPE 38
+	#endif
+
+	#ifndef DWMWCP_ROUND
+		#define DWMWCP_ROUND 2
+	#endif
+
+	#ifndef DWMSBT_MAINWINDOW
+		#define DWMSBT_MAINWINDOW 2
+	#endif
+#endif
+
 namespace Sky {
+
+#ifdef SKY_PLATFORM_WINDOWS
+	void TrySetDwmWindowAttribute(HWND windowHandle, DWORD attribute, const void* value, DWORD size)
+	{
+		DwmSetWindowAttribute(windowHandle, attribute, value, size);
+	}
+
+	void ApplyNativeTitleBarTheme(GLFWwindow* window)
+	{
+		HWND windowHandle = glfwGetWin32Window(window);
+		if (!windowHandle)
+			return;
+
+		const BOOL darkModeEnabled = TRUE;
+		const COLORREF captionColor = RGB(22, 28, 38);
+		const COLORREF textColor = RGB(224, 230, 238);
+		const COLORREF borderColor = RGB(52, 68, 90);
+		const DWORD cornerPreference = DWMWCP_ROUND;
+		const DWORD backdropType = DWMSBT_MAINWINDOW;
+
+		TrySetDwmWindowAttribute(windowHandle, DWMWA_USE_IMMERSIVE_DARK_MODE, &darkModeEnabled, sizeof(darkModeEnabled));
+		TrySetDwmWindowAttribute(windowHandle, DWMWA_CAPTION_COLOR, &captionColor, sizeof(captionColor));
+		TrySetDwmWindowAttribute(windowHandle, DWMWA_TEXT_COLOR, &textColor, sizeof(textColor));
+		TrySetDwmWindowAttribute(windowHandle, DWMWA_BORDER_COLOR, &borderColor, sizeof(borderColor));
+		TrySetDwmWindowAttribute(windowHandle, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(cornerPreference));
+		TrySetDwmWindowAttribute(windowHandle, DWMWA_SYSTEMBACKDROP_TYPE, &backdropType, sizeof(backdropType));
+	}
+#endif
 
 	static bool s_GLFWInitialized = false;
 	static uint8_t s_GLFWWindowCount = 0;
@@ -56,6 +123,10 @@ namespace Sky {
 			m_Window = glfwCreateWindow(static_cast<int>(props.Width), static_cast<int>(props.Height), m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
+
+#ifdef SKY_PLATFORM_WINDOWS
+		ApplyNativeTitleBarTheme(m_Window);
+#endif
 
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
