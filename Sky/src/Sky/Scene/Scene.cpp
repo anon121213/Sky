@@ -19,7 +19,7 @@ namespace Sky
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity{m_Registry.create(), this};
-		entity.AddComponent<TransformComponent>(glm::mat4{1.0f});
+		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>(name.empty() ? "Entity" : name);
 		return entity;
 	}
@@ -42,7 +42,7 @@ namespace Sky
 		}
 
 		Camera* mainCamera = nullptr;
-		glm::mat4* cameraTransform = nullptr;
+		glm::mat4 cameraTransform;
 		{
 			auto group = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
 			for (auto entity : group)
@@ -52,7 +52,7 @@ namespace Sky
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
-					cameraTransform = &transform.Transform;
+					cameraTransform = transform.GetTransform();
 					break;
 				}
 			}
@@ -60,13 +60,13 @@ namespace Sky
 
 		if (mainCamera)
 		{
-			Renderer2D::BeginScene(mainCamera->GetProjection(), *cameraTransform);
+			Renderer2D::BeginScene(mainCamera->GetProjection(), cameraTransform);
 
 			auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
 			for (auto entity : view)
 			{
-				auto& [transform, spriteRenderer] = view.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawQuad(transform, spriteRenderer.Color);
+				auto [transform, spriteRenderer] = view.get<TransformComponent, SpriteRendererComponent>(entity);
+				Renderer2D::DrawQuad(transform.GetTransform(), spriteRenderer.Color);
 			}
 
 			Renderer2D::EndScene();

@@ -39,23 +39,23 @@ namespace Sky
 		public:
 			void OnCreate() override
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
-				transform[3][1] = rand() % 10 - 5.0f;
+				auto& translation = GetComponent<TransformComponent>().Translation;
+				translation.x = rand() % 10 - 5.0f;
 			}
 
 			void OnUpdate(Timestep ts) override
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& translation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
 				if (Input::IsKeyPressed(SKY_KEY_W))
-					transform[3][1] += speed * ts;
+					translation.y += speed * ts;
 				if (Input::IsKeyPressed(SKY_KEY_A))
-					transform[3][0] -= speed * ts;
+					translation.x -= speed * ts;
 				if (Input::IsKeyPressed(SKY_KEY_S))
-					transform[3][1] -= speed * ts;
+					translation.y -= speed * ts;
 				if (Input::IsKeyPressed(SKY_KEY_D))
-					transform[3][0] += speed * ts;
+					translation.x += speed * ts;
 			}
 
 			void OnDestroy() override
@@ -156,7 +156,7 @@ namespace Sky
 
 		m_SceneHierarchyPanel.OnImGuiRender();
 
-		ImGui::Begin("Settings");
+		ImGui::Begin("Render stats");
 
 		const auto stats = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stats:");
@@ -164,33 +164,6 @@ namespace Sky
 		ImGui::Text("Quads: %u", stats.QuadCount);
 		ImGui::Text("Vertices: %u", stats.GetTotalVertexCount());
 		ImGui::Text("Indices: %u", stats.GetTotalIndexCount());
-
-		if (m_SquareEntity)
-		{
-			ImGui::Separator();
-			const auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
-			ImGui::Text("%s", tag.c_str());
-
-			auto& color = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(color));
-			ImGui::Separator();
-		}
-
-		ImGui::DragFloat3("Camera Transform",
-		                  glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
-
-		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
-		{
-			m_SecondCameraEntity.GetComponent<CameraComponent>().Primary = !m_PrimaryCamera;
-			m_CameraEntity.GetComponent<CameraComponent>().Primary = m_PrimaryCamera;
-		}
-
-		{
-			auto& camera = m_SecondCameraEntity.GetComponent<CameraComponent>().Camera;
-			float orthoSize = camera.GetOrthographicSize();
-			if (ImGui::DragFloat("Second camera ortho size", &orthoSize))
-				camera.SetOrthographicSize(orthoSize);
-		}
 
 		ImGui::End();
 
