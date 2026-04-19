@@ -2,6 +2,7 @@
 
 #include "Sky.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Sky/Events/KeyEvent.h"
 
 namespace Sky
 {
@@ -17,6 +18,13 @@ namespace Sky
 		void OnUpdate(Timestep ts) override;
 		void OnImGuiRender() override;
 		void OnEvent(Event& event) override;
+
+		bool OnKeyPressed(KeyPressedEvent& event);
+
+	private:
+		void NewScene();
+		void OpenScene();
+		void SaveSceneAs();
 
 	private:
 		OrthographicCameraController m_CameraController;

@@ -4,6 +4,9 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "Sky/Scene/Components.h"
 
+#include "Sky/Scene/SceneSerializer.h"
+#include "Sky/Utils/PlatformUtils.h"
+
 namespace Sky
 {
 	EditorLayer::EditorLayer()
@@ -22,6 +25,7 @@ namespace Sky
 
 		m_ActiveScene = CreateRef<Scene>();
 
+#if 0
 		auto square = m_ActiveScene->CreateEntity("Square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{0.0f, 1.0f, 0.0f, 1.0f});
 
@@ -48,13 +52,13 @@ namespace Sky
 				auto& translation = GetComponent<TransformComponent>().Translation;
 				float speed = 5.0f;
 
-				if (Input::IsKeyPressed(SKY_KEY_W))
+				if (Input::IsKeyPressed(Key::W))
 					translation.y += speed * ts;
-				if (Input::IsKeyPressed(SKY_KEY_A))
+				if (Input::IsKeyPressed(Key::A))
 					translation.x -= speed * ts;
-				if (Input::IsKeyPressed(SKY_KEY_S))
+				if (Input::IsKeyPressed(Key::S))
 					translation.y -= speed * ts;
-				if (Input::IsKeyPressed(SKY_KEY_D))
+				if (Input::IsKeyPressed(Key::D))
 					translation.x += speed * ts;
 			}
 
@@ -65,6 +69,7 @@ namespace Sky
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+#endif
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
@@ -147,6 +152,15 @@ namespace Sky
 		{
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewScene();
+
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					SaveSceneAs();
+
 				if (ImGui::MenuItem("Exit")) Application::Get().Close();
 				ImGui::EndMenu();
 			}
@@ -193,5 +207,69 @@ namespace Sky
 	void EditorLayer::OnEvent(Event& event)
 	{
 		m_CameraController.OnEvent(event);
+
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<KeyPressedEvent>(SKY_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+	}
+
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& event)
+	{
+		if (event.GetRepeatCount() > 0)
+			return false;
+
+		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
+		switch (event.GetKey())
+		{
+			case Key::N:
+			{
+				if (control)
+					NewScene();
+			}
+
+			case Key::O:
+			{
+				if (control)
+					OpenScene();
+			}
+
+			case Key::S:
+			{
+				if (control && shift)
+					SaveSceneAs();
+			}
+		}
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Sky Scene (*.scene)\0*.scene\0");
+		if (!filepath.empty())
+		{
+			m_ActiveScene = CreateRef<Scene>();
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+		}
+	}
+
+	void EditorLayer::SaveSceneAs()
+	{
+		std::string filepath = FileDialogs::SaveFile("Sky Scene (*.scene)\0*.scene\0", "scene");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+		}
 	}
 }

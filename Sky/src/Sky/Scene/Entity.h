@@ -28,6 +28,14 @@ namespace Sky
 		}
 
 		template <typename T>
+		T& GetOrCreateComponent()
+		{
+			if (!HasComponent<T>())
+				return AddComponent<T>();
+			return GetComponent<T>();
+		}
+
+		template <typename T>
 		bool HasComponent() const
 		{
 			return m_Scene->m_Registry.all_of<T>(m_EntityHandle);

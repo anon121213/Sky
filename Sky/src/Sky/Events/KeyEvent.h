@@ -1,34 +1,35 @@
 #pragma once
 
 #include "Event.h"
+#include "Sky/Core/KeyCodes.h"
 
 namespace Sky {
 
 	class KeyEvent : public Event
 	{
 	public:
-		inline int GetKeyCode() const { return m_KeyCode; }
+		inline KeyCode GetKey() const { return m_Key; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
-		KeyEvent(int keycode)
-			: m_KeyCode(keycode) {
+		KeyEvent(KeyCode key)
+			: m_Key(key) {
 		}
 
-		int m_KeyCode;
+		KeyCode m_Key;
 	};
 
 	class KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keycode, int repeatCount)
-			: KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+		KeyPressedEvent(KeyCode key, int repeatCount)
+			: KeyEvent(key), m_RepeatCount(repeatCount) {}
 
 		inline int GetRepeatCount() const { return m_RepeatCount; }
 
 		std::string ToString() const override {
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << m_KeyCode << " (" << m_RepeatCount << " repeats)";
+			ss << "KeyPressedEvent: " << static_cast<int32_t>(m_Key) << " (" << m_RepeatCount << " repeats)";
 			return ss.str();
 		}
 
@@ -40,13 +41,13 @@ namespace Sky {
 	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keycode) 
-			: KeyEvent(keycode) {}
+		KeyReleasedEvent(KeyCode key) 
+			: KeyEvent(key) {}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << m_KeyCode;
+			ss << "KeyReleasedEvent: " << static_cast<int32_t>(m_Key);
 			return ss.str();
 		}
 
@@ -56,12 +57,12 @@ namespace Sky {
 	class KeyTypedEvent : public KeyEvent
 	{
 	public:
-		KeyTypedEvent(int keycode)
-			: KeyEvent(keycode) {}
+		KeyTypedEvent(KeyCode key)
+			: KeyEvent(key) {}
 
 		std::string ToString() const override {
 			std::stringstream ss;
-			ss << "KeyTypedEvent: " << m_KeyCode;
+			ss << "KeyTypedEvent: " << static_cast<int32_t>(m_Key);
 			return ss.str();
 		}
 

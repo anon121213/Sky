@@ -6,10 +6,10 @@
 
 namespace Sky {
 
-	bool Input::IsKeyPressed(int keyCode)
+	bool Input::IsKeyPressed(KeyCode key)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetKey(window, keyCode);
+		auto state = glfwGetKey(window, static_cast<int32_t>(key));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
