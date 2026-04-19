@@ -12,4 +12,4 @@
 	url = https://github.com/g-truc/glm
 [submodule "Sky/vendor/yaml-cpp"]
 	path = Sky/vendor/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp
+	url = https://github.com/anon121213/yaml-cpp
