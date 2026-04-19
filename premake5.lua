@@ -1,6 +1,6 @@
 workspace "Sky"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Sky-Editor"
 	
 	configurations {
 		"Debug",
@@ -22,6 +22,7 @@ workspace "Sky"
 	IncludeDir["stb_image"] = "%{wks.location}/Sky/vendor/stb_image"
 	IncludeDir["entt"] = "%{wks.location}/Sky/vendor/entt/include"
 	IncludeDir["yaml_cpp"] = "%{wks.location}/Sky/vendor/yaml-cpp/include"
+	IncludeDir["ImGuizmo"] = "%{wks.location}/Sky/vendor/ImGuizmo"
 
 	group "Dependencies"
 		include "Sky/vendor/GLFW"

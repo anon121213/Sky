@@ -18,6 +18,7 @@ project "Sky-Editor"
 		"%{wks.location}/Sky/vendor",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}",
 	}
 
 	links {

@@ -1,13 +1,13 @@
-#include "Skypch.h"
+#include "skypch.h"
 #include "ImGuiLayer.h"
-
-#include "imgui.h"
-#include "backends/imgui_impl_glfw.h"
-#include "backends/imgui_impl_opengl3.h"
-
 #include "Sky/Core/Application.h"
 
-#include "GLFW/glfw3.h"
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+
+#include <GLFW/glfw3.h>
+#include "ImGuizmo.h"
 
 namespace Sky {
 
@@ -80,6 +80,7 @@ namespace Sky {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()
@@ -200,5 +201,56 @@ namespace Sky {
 		colors[ImGuiCol_TableBorderLight] = ImVec4{ 0.16f, 0.19f, 0.23f, 1.0f };
 		colors[ImGuiCol_TableRowBgAlt] = ImVec4{ 0.09f, 0.10f, 0.12f, 0.35f };
 		colors[ImGuiCol_ModalWindowDimBg] = ImVec4{ 0.02f, 0.03f, 0.05f, 0.45f };
+
+		// ---------------- ImGuizmo ----------------
+		// Tuned to match the slate/steel-blue palette above.
+		// Accent (steel-blue) = (0.46, 0.62, 0.84) — same as ImGuiCol_CheckMark.
+		ImGuizmo::Style& gizmo = ImGuizmo::GetStyle();
+
+		gizmo.TranslationLineThickness    = 5.0f;
+		gizmo.TranslationLineArrowSize    = 10.0f;
+		gizmo.TranslationLineHitRadius    = 10.0f;
+		gizmo.RotationLineThickness       = 4.0f;
+		gizmo.RotationOuterLineThickness  = 5.0f;
+		gizmo.ScaleLineThickness          = 5.0f;
+		gizmo.ScaleLineCircleSize         = 9.0f;
+		gizmo.ScaleLineHitRadius          = 10.0f;
+		gizmo.HatchedAxisLineThickness    = 3.0f;
+		gizmo.CenterCircleSize            = 8.0f;
+
+		auto& g = gizmo.Colors;
+		// Axes: desaturated R/G/B that don't clash with cool UI
+		g[ImGuizmo::DIRECTION_X]         = ImVec4{ 0.86f, 0.36f, 0.40f, 1.00f }; // coral-red
+		g[ImGuizmo::DIRECTION_Y]         = ImVec4{ 0.42f, 0.78f, 0.55f, 1.00f }; // teal-green
+		g[ImGuizmo::DIRECTION_Z]         = ImVec4{ 0.46f, 0.62f, 0.94f, 1.00f }; // engine accent
+
+		// Planes: same hues, translucent
+		g[ImGuizmo::PLANE_X]             = ImVec4{ 0.86f, 0.36f, 0.40f, 0.40f };
+		g[ImGuizmo::PLANE_Y]             = ImVec4{ 0.42f, 0.78f, 0.55f, 0.40f };
+		g[ImGuizmo::PLANE_Z]             = ImVec4{ 0.46f, 0.62f, 0.94f, 0.40f };
+
+		// Highlights / state
+		g[ImGuizmo::SELECTION]           = ImVec4{ 0.96f, 0.78f, 0.34f, 1.00f }; // warm amber on hover
+		g[ImGuizmo::INACTIVE]            = ImVec4{ 0.42f, 0.46f, 0.52f, 0.60f }; // muted slate
+
+		// Lines / arcs / hatches — pulled from the UI accent ramp
+		g[ImGuizmo::TRANSLATION_LINE]    = ImVec4{ 0.78f, 0.82f, 0.88f, 1.00f };
+		g[ImGuizmo::SCALE_LINE]          = ImVec4{ 0.78f, 0.82f, 0.88f, 1.00f };
+		g[ImGuizmo::ROTATION_USING_BORDER] = ImVec4{ 0.96f, 0.78f, 0.34f, 1.00f };
+		g[ImGuizmo::ROTATION_USING_FILL]   = ImVec4{ 0.96f, 0.78f, 0.34f, 0.55f };
+		g[ImGuizmo::HATCHED_AXIS_LINES]  = ImVec4{ 0.18f, 0.20f, 0.24f, 1.00f };
+
+		// Text matches ImGui text/disabled
+		g[ImGuizmo::TEXT]                = ImVec4{ 0.84f, 0.87f, 0.91f, 1.00f };
+		g[ImGuizmo::TEXT_SHADOW]         = ImVec4{ 0.00f, 0.00f, 0.00f, 0.85f };
+
+		// Screen-center handle (uniform scale ring / screen-rotate)
+		gizmo.ScreenCircleColor          = ImVec4{ 0.78f, 0.82f, 0.88f, 0.65f };
+
+		// Bounds gizmo — tied to the steel-blue accent
+		gizmo.BoundsOutlineColor         = ImVec4{ 0.46f, 0.62f, 0.84f, 1.00f };
+		gizmo.BoundsOutlineColorDisabled = ImVec4{ 0.42f, 0.46f, 0.52f, 0.60f };
+		gizmo.BoundsLineColor            = ImVec4{ 0.35f, 0.48f, 0.66f, 1.00f };
+		gizmo.BoundsLineColorDisabled    = ImVec4{ 0.30f, 0.34f, 0.40f, 0.60f };
 	}
 }

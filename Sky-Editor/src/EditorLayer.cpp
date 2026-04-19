@@ -2,15 +2,18 @@
 #include "imgui/imgui.h"
 
 #include "glm/gtc/type_ptr.hpp"
+#include "ImGuizmo.h"
 #include "Sky/Scene/Components.h"
 
 #include "Sky/Scene/SceneSerializer.h"
 #include "Sky/Utils/PlatformUtils.h"
 
+#include "Sky/Math/Math.h"
+
 namespace Sky
 {
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.f)
+		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.f), m_GizmoType(ImGuizmo::TRANSLATE)
 	{
 	}
 
@@ -186,7 +189,7 @@ namespace Sky
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		if (m_ViewportSize != *(glm::vec2*)&viewportSize && viewportSize.x > 0 && viewportSize.y > 0)
@@ -198,6 +201,52 @@ namespace Sky
 		}
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+
+		// Gizmo
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+
+		if (selectedEntity && m_GizmoType != -1)
+		{
+			ImGuizmo::SetDrawlist();
+			ImVec2 viewportMin = ImGui::GetWindowContentRegionMin();
+			ImVec2 viewportMax = ImGui::GetWindowContentRegionMax();
+			ImVec2 viewportOffset = ImGui::GetWindowPos();
+			ImGuizmo::SetRect(viewportMin.x + viewportOffset.x, viewportMin.y + viewportOffset.y,
+				viewportMax.x - viewportMin.x, viewportMax.y - viewportMin.y);
+
+			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			ImGuizmo::SetOrthographic(camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic);
+			const glm::mat4& cameraProjection = camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
+
+			bool snap = Input::IsKeyPressed(Key::LeftControl);
+			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+
+			if (m_GizmoType == ImGuizmo::ROTATE)
+				snapValue = 45.0f; // Snap to 45 degrees for rotation
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform), 
+				nullptr, snap ? snapValues : nullptr);
+
+			if (ImGuizmo::IsUsing())
+			{
+				glm::vec3 translation, rotation, scale;
+				Math::DecomposeTransform(transform, translation, rotation, scale);
+				glm::vec3 deltaRotation = rotation - tc.Rotation;
+
+				tc.Translation = translation;
+				tc.Rotation += deltaRotation;
+				tc.Scale = scale;
+			}
+		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -239,6 +288,28 @@ namespace Sky
 				if (control && shift)
 					SaveSceneAs();
 			}
+
+			// Gizmos
+
+			case Key::Q:
+				m_GizmoType = -1;
+				break;
+
+			case Key::W:
+				m_GizmoType = ImGuizmo::TRANSLATE;
+				break;
+
+			case Key::E:
+				m_GizmoType = ImGuizmo::ROTATE;
+				break;
+
+			case Key::R:
+				m_GizmoType = ImGuizmo::SCALE;
+				break;
+
+			case Key::Y:
+				m_GizmoType = ImGuizmo::UNIVERSAL;
+				break;
 		}
 	}
 

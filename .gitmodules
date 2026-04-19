@@ -13,3 +13,6 @@
 [submodule "Sky/vendor/yaml-cpp"]
 	path = Sky/vendor/yaml-cpp
 	url = https://github.com/anon121213/yaml-cpp
+[submodule "Sky/vendor/ImGuizmo"]
+	path = Sky/vendor/ImGuizmo
+	url = https://github.com/anon121213/ImGuizmo

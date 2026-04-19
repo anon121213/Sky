@@ -20,8 +20,9 @@ namespace Sky
 		entt::registry& Reg() { return m_Registry; }
 
 		void OnUpdate(Timestep ts);
-		void OnUpdateEditor(Timestep ts, const OrthographicCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
+
+		Entity GetPrimaryCameraEntity();
 	private:
 		template<typename T>
 		void OnComponentAdded(Entity entity, T& component);

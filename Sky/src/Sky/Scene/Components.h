@@ -1,6 +1,9 @@
 #pragma once
 #include "glm/glm.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 #include "SceneCamera.h"
 #include "ScriptableEntity.h"
 #include "glm/ext/matrix_transform.hpp"
@@ -30,9 +33,7 @@ namespace Sky
 
 		glm::mat4 GetTransform() const
 		{
-			const glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), Rotation.y, glm::vec3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+			const glm::mat4 rotation = glm::toMat4(glm::quat(Rotation));
 
 			return glm::translate(glm::mat4(1.0f), Translation)
 				* rotation
