@@ -5,8 +5,16 @@ bin-int/
 
 !vendor/bin
 
-#files
+# Files
 *.user
-Sandbox/SkyProfile-Runtime.json
-Sandbox/SkyProfile-Shutdown.json
-Sandbox/SkyProfile-Startup.json
+*.vcxproj
+*.vcxproj.filters
+*.sln
+
+# ImGui settings
+imgui.ini
+
+# Profiler sessions
+**/SkyProfile-Runtime.json
+**/SkyProfile-Shutdown.json
+**/SkyProfile-Startup.json

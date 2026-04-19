@@ -9,7 +9,7 @@ project "Glad"
 	files
 	{
 		"include/glad/glad.h",
-		"include/KHR/paltform.h",
+		"include/KHR/platform.h",
 		"src/glad.c",
 	}
 
@@ -27,4 +27,8 @@ project "Glad"
 
 	filter "configurations:Release"
 		runtime "Release"
-		symbols "on"
+		optimize "on"
+
+    filter "configurations:Dist"
+	    runtime "Release"
+	    optimize "on"
