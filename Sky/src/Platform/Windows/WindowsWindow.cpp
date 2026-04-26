@@ -116,7 +116,18 @@ namespace Sky {
 
 		{
 			SKY_PROFILE_SCOPE("glfwCreateWindow");
-			m_Window = glfwCreateWindow(static_cast<int>(props.Width), static_cast<int>(props.Height), m_Data.Title.c_str(), nullptr, nullptr);
+
+			m_Window = glfwCreateWindow(
+				static_cast<int>(m_Data.Width),
+				static_cast<int>(m_Data.Height),
+				m_Data.Title.c_str(),
+				nullptr,
+				nullptr
+			);
+
+			if (props.Mode == WindowMode::Maximized)
+				glfwMaximizeWindow(m_Window);
+
 			++s_GLFWWindowCount;
 		}
 

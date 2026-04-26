@@ -7,16 +7,24 @@
 
 namespace Sky {
 	
+	enum class WindowMode
+	{
+		Windowed,
+		Maximized
+	};
+
 	struct WindowProps
 	{
 		std::string Title;
 		uint32_t Width;
 		uint32_t Height;
+		WindowMode Mode;
 
 		explicit WindowProps(std::string title = "Sky Engine",
-		                     const uint32_t width = 1280,
-		                     const uint32_t height = 720)
-			: Title(std::move(title)), Width(width), Height(height) 
+			uint32_t width = 1920,
+			uint32_t height = 1080,
+			WindowMode mode = WindowMode::Windowed)
+			: Title(std::move(title)), Width(width), Height(height), Mode(mode)
 		{
 		}
 	};

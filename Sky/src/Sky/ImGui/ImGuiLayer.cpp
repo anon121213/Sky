@@ -1,6 +1,7 @@
 #include "skypch.h"
 #include "ImGuiLayer.h"
 #include "Sky/Core/Application.h"
+#include "Sky/Core/Monitor.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
@@ -28,9 +29,14 @@ namespace Sky {
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
+	
+		const float dpiScale = Application::Get().GetMonitor().GetContentScale() * 0.8f;
 
-		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", 18.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", 18.0f);
+		constexpr float baseFontSize = 18.0f;
+		const float scaledFontSize = baseFontSize * dpiScale;
+
+		io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", scaledFontSize);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", scaledFontSize);
 
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
@@ -45,6 +51,8 @@ namespace Sky {
 		}
 
 		SetDarkThemeColors();
+
+		style.ScaleAllSizes(dpiScale);
 
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());

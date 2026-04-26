@@ -1,13 +1,12 @@
 #pragma once
 
 #include "Core.h"
+#include "Monitor.h"
 
 #include "Window.h"
 #include "Sky/Core/LayerStack.h"
 #include "Sky/Events/Event.h"
 #include "Sky/Events/ApplicationEvent.h"
-
-#include "Sky/Core/Timestep.h"
 
 #include "Sky/ImGui/ImGuiLayer.h"
 
@@ -30,6 +29,7 @@ namespace Sky {
 
 		ImGuiLayer* GetImGuiLayer() const { return m_ImGuiLayer; }
 		Window& GetWindow() const { return *m_Window; }
+		Monitor& GetMonitor() const { return *m_Monitor; }
 
 		static Application& Get() { return *s_Instance; }
 	private:
@@ -37,6 +37,7 @@ namespace Sky {
 		bool OnWindowResized(WindowResizeEvent& e);
 	private:
 		Scope<Window> m_Window;
+		Scope<Monitor> m_Monitor;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

@@ -5,6 +5,8 @@
 
 #include <glfw/glfw3.h>
 
+#include "Platform/GLFW/GlfwMonitor.h"
+
 namespace Sky {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -17,8 +19,10 @@ namespace Sky {
 		SKY_CORE_ASSERT(!s_Instance, "Application already exists!")
 		s_Instance = this;
 
-		m_Window = Window::Create(WindowProps(name));
+		m_Window = Window::Create(WindowProps(name, 1920, 1080, WindowMode::Maximized));
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+		m_Monitor = Monitor::CreatePrimary();
 
 		Renderer::Init();
 
