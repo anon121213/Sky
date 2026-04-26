@@ -58,21 +58,52 @@ namespace Sky{
 
 	void EditorCamera::OnUpdate(Timestep ts)
 	{
-		if (Input::IsKeyPressed(Key::LeftAlt))
-		{
-			const glm::vec2 mouse{ Input::GetMouseX(), Input::GetMouseY() };
-			const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
-			m_InitialMousePosition = mouse;
+		const glm::vec2 mouse{ Input::GetMouseX(), Input::GetMouseY() };
+		const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.0015f;
+		m_InitialMousePosition = mouse;
 
-			if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle))
-				MousePan(delta);
-			else if (Input::IsMouseButtonPressed(Mouse::ButtonLeft))
-				MouseRotate(delta);
-			else if (Input::IsMouseButtonPressed(Mouse::ButtonRight))
-				MouseZoom(delta.y);
+		const bool alt = Input::IsKeyPressed(Key::LeftAlt);
+		const bool lmb = Input::IsMouseButtonPressed(Mouse::ButtonLeft);
+		const bool mmb = Input::IsMouseButtonPressed(Mouse::ButtonMiddle);
+		const bool rmb = Input::IsMouseButtonPressed(Mouse::ButtonRight);
+
+		if (alt && lmb)
+			MouseRotate(delta);
+		else if (mmb)
+			MousePan(delta);
+		else if (alt && rmb)
+			MouseZoom(delta.x + delta.y);
+		else if (rmb)
+		{
+			const glm::vec3 oldPosition = m_Position;
+			MouseRotate(delta);
+			m_FocalPoint = oldPosition + GetForwardDirection() * m_Distance;
+			FlyMove(ts);
 		}
 
 		UpdateView();
+	}
+
+	void EditorCamera::FlyMove(float ts)
+	{
+		float speed = m_FlySpeed * ts;
+		if (Input::IsKeyPressed(Key::LeftShift))
+			speed *= 3.0f;
+
+		const glm::vec3 forward = GetForwardDirection();
+		const glm::vec3 right   = GetRightDirection();
+		const glm::vec3 worldUp{ 0.0f, 1.0f, 0.0f };
+
+		glm::vec3 dir{ 0.0f };
+		if (Input::IsKeyPressed(Key::W)) dir += forward;
+		if (Input::IsKeyPressed(Key::S)) dir -= forward;
+		if (Input::IsKeyPressed(Key::D)) dir += right;
+		if (Input::IsKeyPressed(Key::A)) dir -= right;
+		if (Input::IsKeyPressed(Key::E)) dir += worldUp;
+		if (Input::IsKeyPressed(Key::Q)) dir -= worldUp;
+
+		if (glm::dot(dir, dir) > 0.0f)
+			m_FocalPoint += glm::normalize(dir) * speed;
 	}
 
 	void EditorCamera::OnEvent(Event& e)
