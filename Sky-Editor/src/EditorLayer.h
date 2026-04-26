@@ -24,7 +24,7 @@ namespace Sky
 	private:
 		void NewScene();
 		void OpenScene();
-		void SaveSceneAs();
+		void SaveSceneAs() const;
 
 	private:
 		OrthographicCameraController m_CameraController;
@@ -39,7 +39,9 @@ namespace Sky
 		Entity m_CameraEntity;
 		Entity m_SecondCameraEntity;
 
-		bool m_PrimaryCamera = false;
+		bool m_PrimaryCamera = true;
+
+		EditorCamera m_EditorCamera;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };

@@ -12,7 +12,7 @@
 
 #include "Sky/Core/Input.h"
 #include "Sky/Core/KeyCodes.h"
-#include "Sky/Core/MouseButtonCodes.h"
+#include "Sky/Core/MouseCodes.h"
 
 #include "Sky/Renderer/OrthographicCameraController.h"
 

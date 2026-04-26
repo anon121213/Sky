@@ -2,6 +2,7 @@
 
 #include "entt.hpp"
 #include "Sky/Core/Timestep.h"
+#include "Sky/Renderer/EditorCamera.h"
 #include "Sky/Renderer/OrthographicCamera.h"
 
 namespace Sky
@@ -19,7 +20,8 @@ namespace Sky
 
 		entt::registry& Reg() { return m_Registry; }
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
+		void OnUpdateRuntime(Timestep ts);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 		Entity GetPrimaryCameraEntity();

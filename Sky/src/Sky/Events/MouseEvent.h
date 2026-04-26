@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Event.h"
+#include "Sky/Core/MouseCodes.h"
 
 namespace Sky {
 
@@ -50,28 +51,28 @@ namespace Sky {
 	class MouseButtonEvent : public Event
 	{
 	public:
-		int GetMouseButton() const { return m_Button; }
+		inline MouseCode GetMouseButton() const { return m_Button; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput | EventCategoryMouseButton)
 	protected:
-		MouseButtonEvent(const int button)
+		MouseButtonEvent(MouseCode button)
 			: m_Button(button) {
 		}
 
-		int m_Button;
+		MouseCode m_Button;
 	};
 
 	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressedEvent(const int button)
+		MouseButtonPressedEvent(MouseCode button)
 			: MouseButtonEvent(button) {
 		}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonPressedEvent: " << m_Button;
+			ss << "MouseButtonPressedEvent: " << static_cast<int32_t>(m_Button);
 			return ss.str();
 		}
 
@@ -81,14 +82,14 @@ namespace Sky {
 	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(const int button)
+		MouseButtonReleasedEvent(MouseCode button)
 			: MouseButtonEvent(button) {
 		}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent: " << m_Button;
+			ss << "MouseButtonReleasedEvent: " << static_cast<int32_t>(m_Button);
 			return ss.str();
 		}
 

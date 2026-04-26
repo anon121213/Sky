@@ -29,7 +29,19 @@ namespace Sky
 		m_Registry.destroy(entity);
 	}
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{
+		Renderer2D::BeginScene(camera);
+		auto view = m_Registry.view<SpriteRendererComponent, TransformComponent>();
+		for (auto entity : view)
+		{
+			auto [transform, spriteRenderer] = view.get<TransformComponent, SpriteRendererComponent>(entity);
+			Renderer2D::DrawQuad(transform.GetTransform(), spriteRenderer.Color);
+		}
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 		// Update Scripts
 		{
