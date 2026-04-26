@@ -22,6 +22,7 @@ namespace Sky
 		SKY_PROFILE_FUNCTION();
 
 		FrameBufferSpecification fbSpec;
+		fbSpec.Attachments = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::Depth };
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_FrameBuffer = FrameBuffer::Create(fbSpec);
